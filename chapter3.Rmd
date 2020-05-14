@@ -1,5 +1,13 @@
-<!-- $theme: default -->
+---
+title: "Untitled"
+author: "chikako watanabe"
+date: "2020/5/14"
+output: ioslides_presentation
+---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
 
 ## はじめに
 
@@ -11,29 +19,25 @@
 2. 極限サイズをmaster trait（支配的な特性？）として確立する
 3. 個体のサイズ、極限サイズ、生活史パラメータのセットに関するエネルギー収支のパラメータを決定する
 
----
+
 ## 個体は摂餌から得られるエネルギーをどう利用するか？
 - Size spectrum theoryをpopulationまで発展→個体について詳細な記述が必要
 - 個体のサイズの関数としてエネルギー収支（enegy budget)を表現し、摂餌率（consumption rate)から成長率（growth rate）と再生産率（reproduction rate)を決定する
 
-```
 Enegy budget 個体の中での質量とエネルギーの流れ
 Assmilation losses, Metabolic losses,
 Enegy spent on growth and reproduction
-```
-----
+
 ## Master trait
 - 魚類の多様な生態の表現には多くのパラメータが必要↔シンプルな理論構築には邪魔
 - Life-history invariants を利用してパラメータを減らし、最終的に種によって変化するパラメータは一つに絞られた
 - 極限サイズ（W∞）である。これは生活史の多様さを特徴づけるmaster trait の役割を果たすパラメータである。
 
-```
+
 Life History Invariants：生活史においてkeyになる無次元の
 重要パラメータが異なる種間系統間で一定値をとるとき、
 そのパラメータ
-```
 
-----
 ## 3.1 The von Bertallanffy growth model
 本章では、成熟前と成熟後の異なる成長様式を一つのモデルで記述する(biphasic growth model)
 - 成熟前：エネルギーをすべて成長に使う
@@ -42,9 +46,8 @@ Life History Invariants：生活史においてkeyになる無次元の
 再生産にかかるコストを考慮した成長モデルがのちの章で必要になる。 
 最初にもとになるvon Bertalanffyの成長式を詳しく見ていく
 
-----
 
-### von Bertalanffy growth model
+## von Bertalanffy growth model
 
 同化作用(anabolic)と異化作用(catabolic)のプロセスから構成
 
@@ -57,9 +60,7 @@ $kw$  :エネルギーの損失(losses, catabolic)　
 
 いずれも体重のべき乗に比例する（それぞれ,nと1）
 
-----
-
-### nについて
+## nについて
 
 - エネルギーの獲得は同化作用の過程によって限定される
 - それらは組織の表面積からの酸素や食料の吸収と解釈
@@ -67,7 +68,7 @@ $kw$  :エネルギーの損失(losses, catabolic)　
 
 
 
-### 式の導出
+## 式の導出
 
 BOX 3.1 
 
@@ -83,9 +84,8 @@ l(t) = L_\infty(1-e^{-K_t})
 $$
 K：growth constany（時間あたり）, L∞：極限体長
 
----
 
-### K,L∞と、A,k,c の関係
+## K,L∞と、A,k,c の関係
 
 $$
 \frac{dw}{dt}=\frac{dcl^3}{dt}=3cl^2\frac{dl}{dt}=Aw^n-kw
@@ -107,8 +107,6 @@ $$
 
 この成長式はシンプルで、年齢あたりのサイズの変化によく一致し、体長という測定しやすい変数を用いたという点で大いに成功した。
 
------
-
 ## von Bertallanfy 式の問題
 
 - $K$と$L_\infty$に相関関係がある（負、図3.2）
@@ -122,8 +120,6 @@ $$
 	-　West(1997)は、代謝を表す体重のべき数に3/4乗則を採用した
 	-　この本でも近年の代謝生態学の流れに基づき、代謝のべき数として3/4を採用する 
 
-----
-
 ## 3.2 Master Traitとして極限サイズ
 
 von Bertalanffy の成長式は、エネルギーの獲得と損失の重要性が年齢や体のサイズによって変化することで形が決まる。
@@ -136,6 +132,8 @@ von Bertalanffy の成長式は、エネルギーの獲得と損失の重要性�
 $$
 W_\infty=(\frac{A}{k})^\frac{1}{1-n}
 $$
+
+## Aの決定
 AとkにはW∞の決定においてトレードオフの関係がある。
 
 式3.4と上の式を使うと、種による成長の違いは、AとW∞だけで記述できる
@@ -154,12 +152,11 @@ $KL_\infty$とAの関係は、$n=2/3$で確認されているのであるが、b
 
 以下では単純のため、Aは一定として扱う。A=5.35g^0.25/yr
 
-### Biphasic Growth Equation
+## Biphasic Growth Equation
 
 Von Bertalanffy の式から派生。主な違いは、すべてのエネルギーを成長に使う幼魚と、繁殖も行う成魚の様式を区別した上で統合し、成長式に再生産によるロスを反映できるようにした。
 
 初回成熟時の体重（＝半数成熟体重）の極限体重に対する比率を$\eta_m$とする
-
 
 
 未成魚の成長　$g_j(w) = Aw^n$
@@ -182,12 +179,8 @@ g_{bp}(w) = Aw^n[1-\psi(\frac{w}{\eta_mW_\infty})(\frac{w}{W_\infty})^{1-n}]
 $$
 
 
+## para2
 
-
-
-
-para2
-
-para3
+## para3
 
 ## 3.3 成長式における生体エネルギー的定式化
