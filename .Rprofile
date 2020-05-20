@@ -1,3 +1,17 @@
 .libPaths("C:/R/win-library")
 
 setwd("C:/RWD/FEEread")
+
+library(ggplot2)
+library(cowplot)
+library(npsurv)
+#install.packages("npsurv")
+library(npsurv)
+library(fitdistrplus)
+library(caTools)
+library(grImport)
+library(rootSolve)
+library(jpeg)
+library(rfishbase)
+library(taxize)
+library(gam)
