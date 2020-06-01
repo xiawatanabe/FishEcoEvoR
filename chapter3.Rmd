@@ -52,7 +52,7 @@ Life History Invariants：生活史においてkeyになる無次元の重要パ
 同化作用(anabolic)と異化作用(catabolic)のプロセスから構成
 
 $$
-\frac{dw}{dt}= Aw^n-kw
+\frac{dw}{dt}= Aw^n-kw\tag{3.4}
 $$
 
 $Aw^n$ :エネルギーの獲得(accuisition, anabolic) 
@@ -65,7 +65,6 @@ $kw$  :エネルギーの損失(losses, catabolic)　
 - エネルギーの獲得は同化作用の過程によって限定される
 - それらは組織の表面積からの酸素や食料の吸収と解釈
 - シンプルな2/3乗則に従うと考えた
-
 
 
 ## 式の導出
@@ -99,7 +98,7 @@ $$
 $$
 ここでn=2/3 ならば
 $$
-\frac{dl}{dt}=\frac{1}{3}C^{-1/3}A-\frac{k}{3}l =\frac{k}{3}(\frac{c^{-1/3}A}{k}-l)
+\frac{dl}{dt}=\frac{1}{3}C^{-1/3}A-\frac{k}{3}l =\frac{k}{3}\bigl(\frac{c^{-1/3}A}{k}-l\bigr)
 $$
 となり、$K=\frac{k}{3}$,  $L_\infty = \frac{c^{-1/3}A}{k}$ となる
 
@@ -131,7 +130,7 @@ von Bertalanffy の成長式は、エネルギーの獲得と損失の重要性�
 
 このときの関係は以下のようにかける
 $$
-W_\infty=(\frac{A}{k})^\frac{1}{1-n}
+W_\infty=\bigl(\frac{A}{k}\bigr)^\frac{1}{1-n}
 $$
 
 ## Aの決定
@@ -139,7 +138,7 @@ AとkにはW∞の決定においてトレードオフの関係がある。
 
 式3.4と上の式を使うと、種による成長の違いは、AとW∞だけで記述できる
 $$
-\frac{dw}{dt}=Aw^n[1-(\frac{w}{W_\infty})^{1-n}]
+\frac{dw}{dt}=Aw^n\bigl[1-\bigl(\frac{w}{W_\infty}\bigr)^{1-n}\bigr]
 $$
 (この式は体重の増加を示した成長式で、W∞とAだけで記述できる)
 
@@ -166,7 +165,7 @@ Von Bertalanffy の式から派生。主な違いは、すべてのエネルギ�
 
 両者の間を成熟関数でつなぐ
 $$
-\psi_m(w/w_m) = [1+(\frac{w}{w_m})^{-u}]^{-1}=[1+(\frac{w}{\eta_mW_\infty})^{-u}]^{-1}
+\psi_m(w/w_m) = \bigl[1+\bigl(\frac{w}{w_m}\bigr)^{-u}\bigr]^{-1}=\bigl[1+\bigl(\frac{w}{\eta_mW_\infty}\bigr)^{-u}\bigr]^{-1}
 $$
 $\psi(w/w_m)$は、$w<<w_m$ではゼロに、$w>>w_m$では1に近づく。uはその変化の強さを決めるペラメータ（図3.4bの立ち上がり＝steepnessを決める）
 
@@ -176,7 +175,7 @@ g_{bp}(w)=Aw^n-\psi_m(w/w_m)kw
 $$
 ふたたび$k=AW_\infty^{n-1}$を用いて
 $$
-g_{bp}(w) = Aw^n[1-\psi(\frac{w}{\eta_mW_\infty})(\frac{w}{W_\infty})^{1-n}]
+g_{bp}(w) = Aw^n\bigl[1-\psi\bigl(\frac{w}{\eta_mW_\infty}\bigr)\bigl(\frac{w}{W_\infty}\bigr)^{1-n}\bigr]
 $$
 
 biphasic modelは解析的に解けないが、幼魚期の部分だけとりだせば解析的に解くことができる（Box3.3）
@@ -309,7 +308,7 @@ para1
 
 極限サイズが大きい→サイズあたりの繁殖投資が少ない。
 
-成長に関するその他のみかたも、パラメータのセットをつかって説明できる。これらパラメータは種の間でかならずしもinvariantではないが、極限サイズとの関係においてはsystematicな変化はない。かくして極限サイズはMaster traitとなりうる。
+成長に関するその他のみかたも、パラメータのセットをつかって説明できる。これらパラメータは種の間でかならずしもinvariantではないが、極限サイズとの関係においてはsystematicな変化はない。かくして極限サイズは<span style="color:dark red;"> Master trait</span>となりうる。
 
 
 
