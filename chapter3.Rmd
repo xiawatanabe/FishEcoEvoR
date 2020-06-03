@@ -52,7 +52,7 @@ Life History Invariants：生活史においてkeyになる無次元の重要パ
 同化作用(anabolic)と異化作用(catabolic)のプロセスから構成
 
 $$
-\frac{dw}{dt}= Aw^n-kw
+\frac{dw}{dt}= Aw^n-kw\tag{3.4}
 $$
 
 $Aw^n$ :エネルギーの獲得(accuisition, anabolic) 
@@ -65,7 +65,6 @@ $kw$  :エネルギーの損失(losses, catabolic)　
 - エネルギーの獲得は同化作用の過程によって限定される
 - それらは組織の表面積からの酸素や食料の吸収と解釈
 - シンプルな2/3乗則に従うと考えた
-
 
 
 ## 式の導出
@@ -99,7 +98,7 @@ $$
 $$
 ここでn=2/3 ならば
 $$
-\frac{dl}{dt}=\frac{1}{3}C^{-1/3}A-\frac{k}{3}l =\frac{k}{3}(\frac{c^{-1/3}A}{k}-l)
+\frac{dl}{dt}=\frac{1}{3}C^{-1/3}A-\frac{k}{3}l =\frac{k}{3}\bigl(\frac{c^{-1/3}A}{k}-l\bigr)
 $$
 となり、$K=\frac{k}{3}$,  $L_\infty = \frac{c^{-1/3}A}{k}$ となる
 
@@ -131,7 +130,7 @@ von Bertalanffy の成長式は、エネルギーの獲得と損失の重要性�
 
 このときの関係は以下のようにかける
 $$
-W_\infty=(\frac{A}{k})^\frac{1}{1-n}
+W_\infty=\bigl(\frac{A}{k}\bigr)^\frac{1}{1-n}
 $$
 
 ## Aの決定
@@ -139,7 +138,7 @@ AとkにはW∞の決定においてトレードオフの関係がある。
 
 式3.4と上の式を使うと、種による成長の違いは、AとW∞だけで記述できる
 $$
-\frac{dw}{dt}=Aw^n[1-(\frac{w}{W_\infty})^{1-n}]
+\frac{dw}{dt}=Aw^n\bigl[1-\bigl(\frac{w}{W_\infty}\bigr)^{1-n}\bigr]
 $$
 (この式は体重の増加を示した成長式で、W∞とAだけで記述できる)
 
@@ -166,7 +165,7 @@ Von Bertalanffy の式から派生。主な違いは、すべてのエネルギ�
 
 両者の間を成熟関数でつなぐ
 $$
-\psi_m(w/w_m) = [1+(\frac{w}{w_m})^{-u}]^{-1}=[1+(\frac{w}{\eta_mW_\infty})^{-u}]^{-1}
+\psi_m(w/w_m) = \bigl[1+\bigl(\frac{w}{w_m}\bigr)^{-u}\bigr]^{-1}=\bigl[1+\bigl(\frac{w}{\eta_mW_\infty}\bigr)^{-u}\bigr]^{-1}
 $$
 $\psi(w/w_m)$は、$w<<w_m$ではゼロに、$w>>w_m$では1に近づく。uはその変化の強さを決めるペラメータ（図3.4bの立ち上がり＝steepnessを決める）
 
@@ -176,7 +175,7 @@ g_{bp}(w)=Aw^n-\psi_m(w/w_m)kw
 $$
 ふたたび$k=AW_\infty^{n-1}$を用いて
 $$
-g_{bp}(w) = Aw^n[1-\psi(\frac{w}{\eta_mW_\infty})(\frac{w}{W_\infty})^{1-n}]
+g_{bp}(w) = Aw^n\bigl[1-\psi\bigl(\frac{w}{\eta_mW_\infty}\bigr)\bigl(\frac{w}{W_\infty}\bigr)^{1-n}\bigr]
 $$
 
 biphasic modelは解析的に解けないが、幼魚期の部分だけとりだせば解析的に解くことができる（Box3.3）
@@ -245,11 +244,9 @@ standatd metabolism は、生命を維持するために必要な基本的な代
 
 $$M_{std} = k_sw^n$$と書ける。
 
-一方、activityは見積もりが難しい。ここはシンプルに、$M_{std}$に比例するとし、その比率は$k_s$に含まれると考える。
+一方、activity metabolismは見積もりが難しい。ここはシンプルに、$M_{std}$に比例するとし、その比率は$k_s$に含まれると考える。standard and activity metabolismは、最大消費率$hw^n$に比例すると考えることができ、
 
-standard and activity metabolismは、最大消費率$hw^n$に比例すると考えることができ、
-
-$k_s = f_c\varepsilon_ah$ とする。ここで$f_c$は限界摂餌レベル（生命の維持と摂餌のために必要とされる摂餌レベル）と定義する。
+$k_s = f_c\varepsilon_ah$ とする。$f_c$は限界摂餌レベルである。生命の維持と摂餌のための代謝はしたがって、ksを限界摂餌レベルの$\varepsilon_ah$　倍として以下のように書くことができる。
 $$
 M_{std}(w) + M_{act} = f_c\varepsilon_ahw^n
 $$
@@ -271,13 +268,13 @@ $$
 A=\varepsilon_ah(f_0-f_c)
 $$
 
-となる。$\varepsilon_a, f_0, fc, h$　の定数は、種によって大きく違わないことが期待される。なので成長係数Aは一定と扱うことができる（じつは$f_0$は4章のモデルにより一定とは言えないことがわかってるんだけど）。 
+となる。$\varepsilon_a, f_0, fc, h$　の定数は、種によって大きく違わない(life history invariantsである）ことが期待される。なので成長係数Aは一定と扱うことができる（じつは$f_0$は4章のモデルにより一定とは言えないことがわかってるんだけど）。 
 
 
 
 ## 3.4 魚類の生活史を描くMaster traitは他にないのか
 
-　成長式に含まれるいろいろなプロセスは、$W_\infty$できまるとしているが、たとえば3.11式は$W_{\infty}$がAとkで決まることを示している。（Aは一定なので）kをMater traitとし、kから$W_{\infty}$を決めることもできる。なぜそうしないか？使いやすく推定が楽。data-limitedな資源でも推定可能→data-poorな資源にもモデルを応用できる。直感的（intuitive)にわかりやすい。$W_{\infty}=10kg$といわれるとそりゃ魚食性魚類だろうと想像できるが、$k=0.44/yr$といわれてもピンとこない。
+　成長式に含まれるいろいろなプロセスは、$W_\infty$できまるとしているが、たとえば3.11式は$W_{\infty}$がAとkで決まることを示している。Aを一定と考えれば、kをMater traitとし、kから$W_{\infty}$を決めることもできる。なぜそうしないか？使いやすく推定が楽。data-limitedな資源でも推定可能→data-poorな資源にもモデルを応用できる。直感的（intuitive)にわかりやすい。$W_{\infty}=10kg$といわれるとそりゃ魚食性魚類だろうと想像できるが、$k=0.44/yr$といわれてもピンとこない。
 
 　本章の個体成長モデルは、生活史に関わる多くの重要なパラメータが$W_{\infty}$　and/or Aに比例することを示唆することから、この2つのパラメータが決まればその他のパラメータを決めることができるといえる。理論的には正しいのだけど、データ解析からは明確にその関係を示すことはできていない。life-history invariantsが本当にinvariantsであると断言できるだろうか？　この疑問には3つの観点から答えることができよう、semantic（意味論的）、empiric(経験的)、thoretic(理論的)に。
 
@@ -309,7 +306,7 @@ para1
 
 極限サイズが大きい→サイズあたりの繁殖投資が少ない。
 
-成長に関するその他のみかたも、パラメータのセットをつかって説明できる。これらパラメータは種の間でかならずしもinvariantではないが、極限サイズとの関係においてはsystematicな変化はない。かくして極限サイズはMaster traitとなりうる。
+成長に関するその他のみかたも、パラメータのセットをつかって説明できる。これらパラメータは種の間でかならずしもinvariantではないが、極限サイズとの関係においてはsystematicな変化はない。かくして極限サイズは<span style="color:dark red;"> Master trait</span>となりうる。
 
 
 
