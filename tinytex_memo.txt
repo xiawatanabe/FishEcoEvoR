@@ -6,3 +6,10 @@ tinytex::install_tinytex()
 
 revealjsで、htmlで良さげ↓
 https://kazutan.github.io/kazutanR/Rmd_intro.html#revealjs%E3%81%AE%E4%BD%BF%E3%81%84%E6%96%B947
+
+html出力に関するyamlオプション
+https://qiita.com/kazutan/items/726e03dfcef1615ae999
+
+VScode
+https://code.visualstudio.com/docs/?dv=win
+https://jyun76.github.io/revealjs-vscode/

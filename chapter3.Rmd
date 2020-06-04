@@ -1,173 +1,668 @@
 ---
-title: "Untitled"
-author: "chikako watanabe"
-date: "2020/5/14"
-output: ioslides_presentation
+title: "Chapter 3"
+subtitle: Individual Groth and Reproduction
+author: 担当 渡邊
+date: 2020/6/8
+output:
+  revealjs::revealjs_presentation:
+    theme: white
+    self_contained: false
+    transition: none 
+    highlight: pygments
+    #default fade slide convex concave zoom none
+    reveal_options:
+      #autoSlide: 5000
+      width: 960
+      height: 720
+      control: true
+      progress: true
+      slideNumber: true
+      previewLinks: true
+      history: false
+      overview: true
+      center: false
+      left: true
+      mouseWheel: false
+    fig_width: 6
+    fig_height: 4
+    fig_caption: false
+    #css: "for-revealjs.css"
+    #mathjax: local
+    #reveal_plugins: ["notes"] #search
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, cache = F, eval = T)
+knitr::opts_knit$set(root.dir = normalizePath("C:/RWD/FEEread"))
 ```
 
-## はじめに
 
-問題：個体は摂餌から得られるエネルギーをどう利用するか？
+```{r code, include = FALSE}
+library(fishsizespectrum)
+source("R/basetools.R")
 
-解決のため
+#dir.create("TeX/ChapterIndividual")
 
-1. 個体の成長と再生産を記述する
-2. 極限サイズをmaster trait（支配的な形質）とする
-3. 個体のサイズ、極限サイズ、生活史パラメータに関するエネルギー収支のパラメータを決定する
+getGrowthParameters <- function()
+{
+  data <- read.csv("Data/fecundpruned.csv",header=TRUE,sep=",")
+  data$Winf <- data$aW * data$Linf^data$bW
+  data$Wm  <- data$aW * data$Lm^data$bW
+  data$Phylum <- data$phyl
+  levels(data$Phylum) <- c("Elasmobranchs", "Teleosts")
+  #
+  # Data from Kooijman and Gislason:
+  #
+  data2 = read.csv("Data/KooijmanGislason.csv", header=FALSE, col.names=c("K","Linf","T"))
+  #
+  # Combine data for fish
+  # 
+  Q10 <- 1.83
+  ix  <- data$Phylum == "Teleosts"
+  dat <- data.frame(K=data$K[ix] * Q10^((15-data$T[ix])/10), 
+                    W=data$Winf[ix])
+  dat2 <- data.frame(K=data2$K * Q10^((15-data2$T)/10), W=0.01*data2$Linf^3)
+  dat = rbind(dat, dat2)
+  
+  p <- baseparameters()
+  dat$L <- (dat$W/p$c)^(1/3)
+  
+  dat$A = calcA(dat$K, dat$L)
+  
+  dat
+}
+
+panelvonB <- function()
+{
+  #
+  # Sketch of von B curve
+  # 
+  Linf <- 100
+  K <- 0.18
+  
+  ages = seq(0,30,length.out=100)
+  
+  defaultpanel(xlim=ages, ylim=c(0,c(0,110)),
+               xlab="Age (years)",
+               ylab="Length (cm)",
+               label=TRUE)
+  lines(ages, Linf*(1-exp(-K*ages)), lwd=3)
+  lines(ages, y=K*Linf*ages, lty="dashed", lwd=1)
+  lines(x=ages, y=Linf*ages/ages, lty="dashed", lwd=1)
+}
+
+panelSketch <- function()
+{
+  #
+  # Sketch of Winf
+  # 
+  xlim = c(1e-11,1e5)
+  ylim = c(5e-10,1e6)
+  p <- baseparameters()
+  
+  n <- p$n
+  W1 = 10
+  W2 = 10000
+  A <- p$A
+  k = function(W) A*W^(n-1)
+  
+  w=10^seq(from=-3, to=6, length.out=100)
+  Ea = A
+
+  loglogpanel(xlim=w, ylim=A*w^n, 
+              xlab="Body weight (g)", 
+              ylab="Available energy, $E_a$ (g/yr)",
+              label=TRUE)
+  lines(w, A*w^n, lwd=3)
+  
+  ix = w<10*W1
+  lines(w[ix], k(W1)*w[ix])
+  lines(W1*c(1,1), c(1e-4,6*W1^n), lty=dashed)
+
+  ix = w<10*W2
+  lines(w[ix], k(W2)*w[ix])
+  lines(W2*c(1,1), c(1e-4,6*W2^n), lty=dashed)
+}
 
 
-## 個体は摂餌から得られるエネルギーをどう利用するか？
-- Size spectrum theoryをpopulationまで発展させるために個体についてより詳細に記述する必要
-- 個体のサイズの関数としてエネルギー収支（energy budget)を表現し、摂餌率（consumption rate)から成長率（growth rate）と再生産率（reproduction rate)を決定する
+plotSketch_and_vonB <- function()
+{
+  defaultplot(mfcol=c(1,2))
+  panelvonB()
+  panelSketch()
+}
 
-Enegy budget 個体の中での質量とエネルギーの流れ
 
- Assimilation losses+Metabolic losses+Enegy spent on growth and reproduction
+plotKvsLinf <- function()
+{
+  dat <- getGrowthParameters()
+  
+  fig <- ggplot() +
+    geom_point(data=dat, aes(x=L, y=K), colour=grey(0.3))
+  # fit
+  fit <- lm(log(K) ~ log(L), data=dat)
+  tmp <- data.frame(x=dat$L, y=exp(predict(fit)))
+  cat('Fit of K: C = ', exp(fit$coefficients[1]), 
+      ' and exponent ', fit$coefficients[2], "\n")
+  
+  # fit with exponent -0.75:
+  C <- exp(mean(log(dat$K * dat$L^0.75)))
+  cat('K fitted wit n=0.75: ', C, "\n")
+  
+  # fit with exponent -1:
+  C2 <- exp(mean(log(dat$K * dat$L)))
+  
+  fig <- fig +
+    geom_line(data=tmp, aes(x=x,y=y),linetype="dashed") +
+    geom_line(data=tmp, aes(x=x, y=C*x^-0.75)) #+
+  #geom_line(data=tmp, aes(x=x, y=C2/x), linetype="dotted")
+  
+  fig <- fig +
+    xlab(TeX("Asymptotic length, $\\textit{L}_{\\infty}$ (cm)")) + 
+    ylab(TeX("von Bertalanffy coefficient, $\\textit{K}$ (1/yr)"))
+  fig <- loglog(fig, ylim=c(0.03, 3))
+  
+  ggsave("TeX/ChapterIndividual/KvsLinf.pdf",width=singlewidth,height=singlewidth)
+  fig
+}
 
-## Master trait
-- 魚類の多様な生態の表現には多くのパラメータが必要↔シンプルな理論構築には邪魔
-- Life-history invariants を利用してパラメータを減らし、最終的に種によって変化するパラメータは極限サイズ（$W_\infty$）に絞られた。これは生活史の多様さを特徴づけるmaster trait の役割を果たすパラメータである。
+plotA <- function() 
+{
+  dat <- getGrowthParameters()
+  
+  fig <- ggplot() +
+    geom_point(data=dat, aes(x=W, y=A), colour=grey(0.3))
+  
+  # fit
+  fit <- lm(log(A) ~ log(W), data=dat)
+  tmp <- data.frame(x=dat$W, y=exp(predict(fit)))
+  fig <- fig + geom_line(data=tmp, aes(x=x,y=y),linetype="dashed")
+  cat("Fit to A, coef.: ", exp(fit$coefficients[1]), ", exponent: ", fit$coefficients[2],'\n')
+  
+  # Mean value:
+  Amean <- exp(mean(log(dat$A)))
+  cat("Amean ",Amean,"\n")
+  fig <- fig + 
+    geom_line(data=data.frame(x=c(min(dat$W), max(dat$W))), 
+              aes(x=x, y=Amean)) #+
+  #
+  # Finalize figure
+  #
+  fig <- fig +
+    theme(legend.position=c(1,0), legend.justification=c(1,0)) +
+    scale_colour_grey()+ 
+    xlab(TeX("Asymptotic weight, $\\textit{W}_{\\infty}$ (g)")) + 
+    ylab(TeX("Growth coef. $\\textit{A}$ ($g^{1/4}$/yr)")) +
+    labs(colour="",shape="")
+  fig <- loglog(fig)  
+  
+  ggsave("TeX/ChapterIndividual/A.pdf", width=singlewidth, height=height)
+  fig
+}
 
+
+panelEtam <- function()
+{
+  p <- baseparameters()
+  # 
+  # etam
+  # 
+  data <- read.csv("Data/fecundpruned.csv",header=TRUE,sep=",")
+  data$Winf <- data$aW * data$Linf^data$bW
+  data$Wm  <- data$aW * data$Lm^data$bW
+  data$etam <- data$Wm/data$Winf
+  data$Phylum <- ifelse(data$phyl=="t","Teleosts","Elasmobranchs")
+  levels(data$Phylum) <- c("Elasmobranchs", "Teleosts")
+  
+  loglogpanel(xlim=data$Winf, ylim=c(0.01,2),
+              xlab="Asymptotic weight $\\textit{W}_{\\infty}$ (g)", 
+              ylab="Rel. maturation size, $\\textit{\\eta}_\\textit{m}$",
+              label=TRUE)
+  ixElasmo = data$Phylum=="Elasmobranchs"
+  ixTele = data$Phylum=="Teleosts"
+  points(data$Winf[ixElasmo], data$etam[ixElasmo], pch=dots, col=stdgrey)
+  points(data$Winf[ixTele], data$etam[ixTele], pch=dots)
+  #
+  # Fits
+  # 
+  
+  # all:
+  fit <- lm(log(etam) ~ log(Winf), data=data)
+  #tmp <- data.frame(x=data$Winf, y=exp(predict(fit)))
+  #fig <- fig + geom_line(data=tmp, aes(x=x,y=y),linetype="dashed")
+  lines(range(data$Winf), exp(fit$coefficients[1])*range(data$Winf)^fit$coefficients[2],
+        lty=dashed, lwd=3)  
+  # teleosts:
+  ix <- data$Phylum=="Teleosts"
+  fitfish <- lm(log(Wm[ix]/Winf[ix]) ~ log(Winf[ix]), data=data)
+  tmp <- data.frame(x=data$Winf[ix], y=exp(predict(fitfish)))
+  #fig <- fig + geom_line(data=tmp, aes(x=x,y=y), linetype="dotted")
+  # teleosts with exponent 1:
+  etam <- exp(mean(log(data$Wm/data$Winf)))
+  cat('Average eta_m',etam,'\n')
+  lines(range(data$Winf), etam*c(1,1), lwd=3)
+  
+  legend("bottomright", bty="n", 
+         legend=c("Teleosts", "Elasmobranchs"),
+         pch=c(dots,dots),
+         col=c("black", stdgrey))
+}
+
+panelOgive <- function() {
+  ogive <- as.matrix(read.table(file="Data/maturity_saithe.dat", header=FALSE, skip=5))
+  weights <- as.matrix(read.table(file="Data/weightatage_saithe.dat", header=FALSE, skip=5))
+  
+  weights[weights==0] <- max(weights)
+  nages <- dim(weights)[1]
+  nyears <- dim(weights)[2]
+  dat <- data.frame(weight=log(as.vector(weights)), ogive=as.vector(ogive), 
+                    year=rep(seq(1,nyears),nages))
+  dat$ogive[ogive==0] <- NaN
+  dat$ogive[ogive==1] <- NaN
+  dat$ogive.logit <- qlogis(dat$ogive)
+  
+  dat$year = factor(dat$year)
+  
+  m = glm( ogive.logit ~ 0 + year + weight, data=dat )
+  
+  semilogxpanel(xlim=c(0.1,10), ylim=c(0.01,1),
+                xlab="\\textit{w}/\\textit{w}_{maturation}", 
+                ylab="Maturity",
+                label=TRUE)
+  
+  for(i in 1:nyears) {
+    ix = dat$year==i
+    points(exp(dat$weight[ix]+coef(m)[i]/coef(m)[nyears+1]), dat$ogive[ix], pch=dots, col=stdgrey)
+  }
+  w = 10^seq(-2,1, length.out = 100)
+  lines( w, psi(w, coef(m)[nyears+1]) , lwd=3)  
+  vline(1)
+  
+  print(coef(m)[nyears+1])
+}
+
+plotMaturity <- function() {
+  defaultplot(mfcol=c(1,2))
+  panelEtam()
+  panelOgive()
+  
+}
+
+plotR <- function()
+{
+  #
+  # Use gunderson data
+  #
+  p <- baseparameters()
+  A <- read.csv("Data/Gunderson.csv", header = TRUE, sep = ",")
+  A$Winf <- weight(A$Linf)
+  
+  # Estimate A from age at maturation + 0.5:
+  A$A <- p$etaM^0.25/((1-p$n)*(A$alpha+0.5))*A$Winf^(1-p$n) #log(1-p$etaM^0.25*p$etaA) / (-0.25*p$etaA*(A$alpha+0.5) ) * A$Winf^(1-p$n)
+  
+  fig <- ggplot(data=A) +
+    geom_point(aes(x=Winf, y=GSI/A), colour=grey(0.3))
+  
+  # all:
+  fit <- lm(log(GSI/A) ~ log(Winf), data=A)
+  tmp <- data.frame(x=A$Winf, y=exp(predict(fit)))
+  fig <- fig + geom_line(data=tmp, aes(x=x,y=y),linetype="dashed")
+  cat('Fit to R', fit$coefficients,'\n')
+  
+  epsA <- exp(mean(log(A$GSI/A$A*A$Winf^0.25)))
+  cat('eps_repro = ', epsA, '.\n')
+  
+  fig <- fig + 
+    geom_line(aes(x=Winf, y=Winf^(p$n-1))) +
+    geom_line(aes(x=Winf, y=Winf^(p$n-1)*epsA)) +
+    xlab(TeX("Asymptotic weight, $\\textit{W}_{\\infty}$ (g)")) + 
+    ylab(TeX("Repro. output  ($g^{-0.25}$)"))
+  
+  fig <- loglog(fig)
+  ggsave("TeX/ChapterIndividual/R.pdf", width=singlewidth, height=height)
+  fig
+}  
+
+
+plotGrowth <- function()
+{
+  #
+  # Plot some growth functions
+  #
+  library(deSolve)
+  width = 10
+  height = 6
+  
+  W = 2000
+  fig <- ggplot()
+  p <- baseparameters()  
+  p$W <- W
+  # Add my growth curve:
+  #n <- p$n
+  #epsA <- p$etaA
+  etaM <- p$etaM
+  A <- p$A
+  
+  # Interval:
+  CV = 1.95 # Estimated as exp(sqrt(var(log(dat$A)))) in plotA.R
+  ages = seq(0,50,length.out=500)
+  p1 <- p
+  p1$W <- p$W*0.8
+  p1$A <- p$A/CV
+  p2 <- p
+  p2$W <- p$W/0.8
+  p2$A <- p2$A*CV
+  out1 <- ode(y=p$w0, times=ages, func=function(t,w,p) list(growth(p,w)), parms=p1)
+  out2 <- ode(y=p$w0, times=ages, func=function(t,w,p) list(growth(p,w)), parms=p2)
+  
+  fig <- fig + 
+    geom_ribbon(aes(x=out1[,1], ymin=out1[,2], ymax=out2[,2]),
+                fill=grey(0.5))
+  
+  # Add observed von Bertalanffy curves:
+  dat <- getGrowthParameters()
+  
+  ix <- dat$W>0.8*W & dat$W<(1/0.8)*W
+  
+  ages <- seq(0,50, length.out = 150)
+  for (i in 1:sum(ix)) {
+    w <- weight( (dat[ix,]$L[i]*(1-exp(-dat[ix,]$K[i]*ages))) )
+    fig <- fig + 
+      geom_line(data=data.frame(x=ages,y=w),
+                aes(x=x,y=y), size=thin, colour=grey(0.75))
+  }
+  # "Median" line
+  out <- ode(y=p$w0, times=ages, func=function(ages,w,p) list(growth(p,w)), parms=p)
+  fig <- fig + 
+    geom_line(aes(x=out[,1],y=out[,2]), size=1) +
+    geom_hline(yintercept=etaM*W, linetype="dotted",size=thin) +
+    geom_vline(xintercept = ageMaturation(W=W), linetype="dotted",size=thin)
+  
+  fig <- fig +
+    xlab("Age (yr)") + 
+    ylab("Weight (g)") +
+    scale_x_continuous(limits=c(0,0.5*A*W^0.25), oob=rescale_none) +
+    scale_y_continuous(oob=rescale_none)
+  fig <- mytheme(fig)
+  
+  ggsave("TeX/ChapterIndividual/Growth.pdf",width=width, height=height, units="cm")
+  fig
+}
+
+
+plotBudget <- function()
+{
+  p <- baseparameters()
+  W <- 1
+  eta <- 0.001
+  A <- p$A
+  h <- p$h
+  n <- p$n
+  epsEgg <- p$epsEgg
+  etaM <- p$etaM
+  
+  k  = A*W^(n-1)
+  maxrate = A*W^n
+  dat = data.frame(w = 10^seq(from=log10(eta*W), to=log10(W), length.out=100))
+  dat$psi = (1 + (dat$w/(etaM*W))^(-10))^(-1)
+  
+  fig <- ggplot() +
+    # consumption:
+    geom_line(data=dat, aes(x=w, y=p$f0*h*w^n/maxrate), size=thick) +
+    # consumption minus egestion and excretion:
+    geom_ribbon(data=dat, aes(x=w, ymax=(1-0.15-0.1)*p$f0*h*w^n/maxrate, 
+                              ymin=0.01/maxrate), fill=grey(0.9)) +
+    # available energy
+    geom_ribbon(data=dat, aes(x=w, ymax=A*w^n/maxrate, ymin=0.01/maxrate), 
+                fill=grey(0.8)) +
+    geom_line(data=dat, aes(x=w, y=A*w^n/maxrate)) +
+    #geom_ribbon(data=dat, aes(x=w, ymax=(A*w^n-epsR*k*w)/maxrate, 
+    #                          ymin=0.01/maxrate), fill=grey(0.6)) +
+    # Reproductive out:
+    geom_ribbon(data=dat, 
+                aes(x=w, ymax=(A*w^n-(1-epsEgg)*psi*k*w)/maxrate, ymin=0.01/maxrate), 
+                fill=grey(0.6)) +
+    # Reproductive output:
+    #geom_ribbon(data=dat, 
+    #            aes(x=w, ymax=(A*w^n-epsR*psi*k*w)/maxrate, ymin=0.01/maxrate), 
+    #            fill=grey(0.4)) +
+    # Growth
+    #geom_line(data=dat, aes(x=w, y=(A*w^n-psi*k*w)/maxrate), linetype="dashed") +
+    geom_ribbon(data=dat, 
+                aes(x=w, ymax=(A*w^n-psi*k*w)/maxrate, ymin=0.01/maxrate), 
+                fill=grey(0.2)) +
+    #geom_line(data=dat, aes(x=w, y=(A*w^n-(1-epsEgg)*psi*k*w)/maxrate), 
+    #          linetype="dashed", size=thick) +
+    geom_vline(xintercept = etaM, linetype="dotted", size=thin) +
+    xlab(TeX("Relative body weight $(\\textit{w}/\\textit{W}_{\\infty})$")) + 
+    ylab("Normalized rates")
+  fig <- loglog(fig, xlim=c(0.01,1), ylim=c(2e-2,3)) 
+  
+  # W <- 1
+  # fig2 <- ggplot() +
+  #   geom_line(data=dat, aes(x=w, 
+  #       y=((0.15*p$f0 + p$fc*p$epsA)*p$h*w^p$n + psi*(1-p$epsEgg)*A*W^(p$n-1)*w) / w^p$n)) +
+  #   geom_line(data=dat, aes(x=w, A*W^(p$n-1)*w / w^p$n), size=0.5)
+  # fig2 <- semilogx(fig2)
+  # fig2
+  
+  ggsave("TeX/ChapterIndividual/budget.pdf",width=singlewidth, height=height)
+  fig
+}
+
+plotTestGrowth <- function(K, Linf)
+{
+  p <- baseparameters()
+  A <- calcA(K,Linf)
+  p$A <- A
+  W <- weight(Linf)
+  p$W <- W
+  t <- seq(0,30,length.out = 100)
+  cat(A,'\n')
+  
+  out <- ode(y=p$w0, times=t, func=function(t,w,p) list(growth(p,w)), parms=p)
+  
+  fig <- ggplot() +
+    geom_line(aes(x=t, y=weight(Linf*(1-exp(-K*t))))) +
+    geom_line(aes(x=t, y=(0.25*p$A*t + p$w0^0.25)^4)) +
+    geom_hline(yintercept = p$etaM*W) +
+    geom_line(aes(x=out[,1], y=out[,2])) +
+    ylim(c(0, W))
+  fig
+}
+
+
+plotAllChapterIndividual <- function()
+{
+  pdfplot("TeX/ChapterIndividual/vonB2.pdf", plotSketch_and_vonB, width=doublewidth, height=height)
+  plotKvsLinf()
+  plotA()
+  pdfplot("TeX/ChapterIndividual/maturity.pdf", plotMaturity, width=doublewidth, height=height)
+  plotR()
+  plotGrowth()
+  plotBudget()
+  
+}
 ```
-Life History Invariants：生活史においてkeyになる無次元の重要パラメータが異なる種間系統間で一定値をとるとき、そのパラメータ
-```
 
-## 3.1 The von Bertallanffy growth model
 
+
+# 背景1
+- Size spectrum theoryをpopulationまで発展させるために個体についての詳細な記述が必要
+- エネルギー収支をサイズの関数として表現し、消費率(consumption rate)から成長・再生産率を決める
+- これにより個体が獲得したエネルギーをどのように利用するか記述する。
+
+# 背景2
+
+- 成長率をエネルギー収支から決めようという取り組みは20世紀初頭から試みられてきた。
+- von Bertalanffy(1957)：Quantitative Laws in Growth and Metabolismにおいて強力なツールであるvon Bertalanffy の成長式が開発され、これが本章で用いるBiphasic Growth modelの基礎となる（Ursin, 1979などなど）
+- エネルギー収支は集団の中の個体を記述するパラメータに依存する。
+- 最もシンプルな成長モデル（vBモデルのような）は、2つのパラメータで構成されるが、より複雑なモデルはより多くのパラメータを必要とする。
+- 魚類は実に多様な生活史パターンを示すので、複雑なモデルのほうがよくそれらを表現する。
+- しかしシンプルな理論を構築するという見地からは、パラメータが多いとシンプルな関係を明らかにするのを困難にする。
+- そこで、いわゆるlife history invariantsを使ってパラメータを減らしていく。
+- life history invariants とは、魚種間で”systematically”に変動しないパラメータのことである。
+- これはたいへんうまいやりかたで、not invariantな（つまり魚種間で変動する）パラメータをasymptotic sizeに絞ることができる。
+
+このパラメータは魚類の生活史の変異の殆どを特徴づけるMaster Traitの役割を果たす。 
+
+# 背景3
+
+- このエネルギー収支は個体のなかの質量とエネルギーの流れのすべてを考慮する。成長と再生産に使われるエネルギーと同様、消化と代謝による損失も扱う。
+- エネルギー収支は、個体による、個体の状態（飢餓、サイズ、成熟）とその生活史戦略に従う決定によって構築される。
+- これらの決定は、個体の適応度を最適化するための生活史最適化の枠組みと理解できるだろう。
+  そのような理論の断片的に検討されてきた。
+- 例えば再生産スケジュールなど。しかし完成されたものは明らかにされていない。
+- したがって、大部分経験的にもとめられた生活史パラメーターに頼ることになる。
+- この章の目的は以下のとおりである。
+
+1. 個体の成長と再生産を表現する
+2. 極限サイズをmaster traitとして確立する
+3. 個体サイズ、極限サイズおよび生活史パラメータに関係づけてエネルギー収支のパラメータを決定する
+
+# 3.1 The von Bertalanffy growth model
+<div align="left">
 本章では、成熟前と成熟後の異なる成長様式を一つのモデルで記述する(biphasic growth model)
 - 成熟前：エネルギーをすべて成長に使う
 - 成熟後：エネルギーを成長と再生産に使う
-
 再生産にかかるコストを考慮した成長モデルがのちの章で必要になる。 
 最初に、もとになるvon Bertalanffyの成長式を詳しく見ていく
+</dev>
 
+# vB modelの基本
+<div align="left">
+- 同化作用(anabolic)と異化作用(catabolic)のプロセスから構成される
+  - $Aw^n$ :エネルギーの獲得(accuisition, anabolic) 
+  - $kw$  :エネルギーの損失(losses, catabolic)　</dev>
 
-## von Bertalanffy growth model
-
-同化作用(anabolic)と異化作用(catabolic)のプロセスから構成される
 
 $$
 \frac{dw}{dt}= Aw^n-kw\tag{3.4}
 $$
 
-$Aw^n$ :エネルギーの獲得(accuisition, anabolic) 
-$kw$  :エネルギーの損失(losses, catabolic)　
 
-いずれも体重のべき乗（ｎと１）に比例する。
+<div align="left">
+- いずれも体重のべき乗（ｎと１）に比例する。
+- nについて
+  - エネルギーの獲得は同化作用の過程によって決まる
+  - 同化作用は胃や腸など組織の表面積からの、酸素や食料の吸収と解釈
+  - シンプルな2/3乗則に従うと考えた（２章で議論済）
+</div>
 
-## nについて
-
-- エネルギーの獲得は同化作用の過程によって決まる
-- 同化作用は胃や腸など組織の表面積からの、酸素や食料の吸収と解釈
-- シンプルな2/3乗則に従うと考えた（２章で議論済）
-
-数式（１）は$w=cl^3$の関係を使って以下の様にかける(Box3.1)
+# 体長ベースの成長式：vBモデル
+<div  class = "box">
+(3.4)式は$w=cl^3$の関係を使って以下の様にかける(Box3.1)
 $$
 \frac{dl}{dt} = K(L_\infty-l)\tag{3.5}
 $$
 ここで$K= k/3$, $L_\infty=c^{-1/3}Ak$
 
-これを解くと（例えば赤嶺****）von Bertalanffy の成長式になる
+両辺を積分して解く
 $$
 l(t) = L_\infty(1-e^{-K_t})\tag{3.6}
 $$
-K：growth constany（時間あたり）, $L_\infty$：極限体長
+K：growth constant（時間あたり）, $L_\infty$：asymptotic length: 極限体長
 
 
+この成長式はシンプルで、年齢あたりのサイズの変化によく一致し、体長という測定しやすい変数を用いたという点で大いに成功した。
+</div>
 
-#### BOX3.1
+## 図3.1a
 
-3.4式を$w=cl^3$を用いて変形
+初期の成長は傾き$KL_\infty$の直線似近く（斜めの破線）、$l$が$L_\infty$に近づくと成長が止まる（横の破線）。
+
+```{r 3.1a}
+plotSketch_and_vonB()
+```
+
+## Box3.1 Length and Weight-based vB model
+<div aline = "left"> <span fontsize = 18pt>
+3.4式を$w=cl^3$を用いて変形すると
+
 $$
 \frac{dw}{dt}=\frac{dcl^3}{dt}=3cl^2\frac{dl}{dt}=Aw^n-kw
 $$
 
+
 $$
 \frac{dl}{dt} = \frac{1}{3cl^3}A(cl^3)^n-\frac{kcl^3}{3cl^3}
 $$
+
 ここでn=2/3 ならば
 $$
 \frac{dl}{dt}=\frac{1}{3}C^{-1/3}A-\frac{k}{3}l =\frac{k}{3}\bigl(\frac{c^{-1/3}A}{k}-l\bigr)
 $$
-となり、$K=\frac{k}{3}$,  $L_\infty = \frac{c^{-1/3}A}{k}$ とおけば、3.5式に一致する
-$$
-\frac{dl}{dt}=K(L_\infty-l)\tag{3.3}
-$$
-したがってn=2/3であればKはAと$L_\infty$ によって以下のように記述できる。
+となり、$K=\frac{k}{3}$,  $L_\infty = \frac{c^{-1/3}A}{k}$ となる
+</span></div>
 
-
-$$
-K = \frac{A}{3c^{1/3}}\frac{1}{L_\infty}\tag{3.7}
-$$
-
-
-
-図3.1a　体長がごく小さいときは、dl/dtは傾き$KL_\infty$の直線に近く（斜めの破線）、$l$が$L_\infty$に近づくと成長が止まる（横の破線）。
-
-この成長式はシンプルで、年齢あたりのサイズの変化によく一致し、体長という測定しやすい変数を用いたという点で大いに成功した。
-
-## von Bertallanfy 式の問題
-
+# vBモデルの問題
 - $K$と$L_\infty$に相関関係がある（負、図3.2）
-	- $L_\infty$の誤差は$K$に影響する。いっぽうが過大推定されると、もう一方は過小推定される。
-	- だいたい$L_\infty$の誤差は大きい
-	- Aを確かな筋から決めることができれば$L_\infty$の不確実性の$K$への影響は制限されるだろう
-
-図3.2　Koojiman2000 などから得たKと$L_\infty$ の関係。$K=CL_\infty^a$ というモデルを仮定、実線はCもaも推定、破線はa=-0.75, 水温を15℃に補正
-
-- nは3/4のほうがいい→２章で議論したように
+	- $L_\infty$の誤差は$K$に影響し、往々にして$L_\infty$の不確実性は高い
+	  （いっぽうが過大推定されると、もう一方は過小推定される）
+	
+	- Aを確かな筋から推定できれば、$L_\infty$の不確実性の$K$への影響は制限されるだろう
+- nは3/4のほうがいい
 	-　von Bertallanfy は、Haldanes(1928)を読むべきであった
 	-　West(1997)は、代謝を表す体重のべき数に3/4乗則を採用した
 	-　この本でも代謝生態学の流れに従い、代謝のべき数として3/4を採用する 
 
+## 図3.2　Kと$L\infty$　の関係
+```{r 3.2, fig.height=3, fig.width =6}
+plotKvsLinf()
+```
 
-## 3.2 Master Traitとしての極限サイズ
 
-von Bertalanffy の成長式は、エネルギーの獲得と損失の重要性が年齢や体のサイズによって変化することによって形が決まる。
 
-図3.1b　サイズが大きくなると$Aw^{0.75}$ 、$kw$ともに増加していき、両者が交わるところで成長が止まる。このときのサイズが極限サイズ
-
-年齢が重なり体が大きくなると、損失が大きくなって成長にエネルギーが回らなくなり、それ以上サイズは増えなくなる（極限サイズ）。その状態は3.4式において$dw/dt=0$ のときである。ここから$W_\infty$は以下のようにかける。Aとkには$W_\infty$の決定においてトレードオフの関係がある。つまり、$W_\infty$が大きな値をとるためには、Aを大きくする（成長効率を高くする）か、kを小さくする（再生産による損失を減らす）の方向がある。
-
+# 3.2 Master Traitとして極限サイズ
+von Bertalanffy の成長式は、エネルギーの獲得と損失の重要性が年齢や体のサイズによって変化することで形が決まる。
+年齢が重なり体が大きくなると、損失が大きくなって成長にエネルギーが回らなくなり、それ以上サイズは増えなくなる（極限サイズ）
+このときの関係は以下のようにかける
 $$
-W_\infty=\bigl(\frac{A}{k}\bigr)^\frac{1}{1-n}\tag{3.11}
+W_\infty=\bigl(\frac{A}{k}\bigr)^\frac{1}{1-n}
 $$
+初期の成長は傾き$KL_\infty$の直線似近く（斜めの破線）、$l$が$L_\infty$に近づくと成長が止まる（横の破線）。
+
+## 図3.1b
+```{r 3.1, fig.height=3, fig.width =6}
+plotSketch_and_vonB()
+```
 
 
-
+# Aの決定
+AとkにはW∞の決定においてトレードオフの関係がある。
 式3.4と上の式を使うと、種による成長の違いは、AとW∞だけで記述できる
 $$
-\frac{dw}{dt}=Aw^n\bigl[1-\bigl(\frac{w}{W_\infty}\bigr)^{1-n}\bigr]\tag{3.12}
+\frac{dw}{dt}=Aw^n\bigl[1-\bigl(\frac{w}{W_\infty}\bigr)^{1-n}\bigr]
 $$
-Aはエネルギーの獲得と同化のプロセスを表現する成長係数であり、このプロセスは種の極限体長とは関係しないと期待できる（体が大きくなる種はAが大きく、体が大きくならない個体はAも小さいということはない）。Aの値を求めるために、von Bertalanffy 成長式で推定された$K$ と$L_\infty$の値に頼るとしよう（図3.3）。
+(この式は体重の増加を示した成長式で、W∞とAだけで記述できる)
+
+Aはエネルギーの獲得と同化のプロセスを表現する成長係数であり、このプロセスは種の極限体長とは関係しないと期待できる。
+
+Aの値を決めるために、von Bertalanffy 成長式で推定された$K$ と$L_\infty$の値に頼るとしよう（図3.3）。
+
+$KL_\infty$とAの関係は、$n=2/3$で確認されているのであるが、box3.2から、$n=3/4$でも概ねOK。
 
 図3.3をみると、大雑把に見ればAは$W_\infty$に対して独立のようである。データは同じ極限サイズでも成長速度は2倍近くことなることも示す。実際にはAは極限サイズが大きくなるにつれて若干増加する。これは大型の種は小型の種より成長が速いことを示す。速い成長は高い体温、高い代謝を伴い、それはサバ科魚類に多い。そして実際、サバ科魚類は大型魚種の主要な種である。
 
 以下では単純のため、Aは一定として扱う。A=5.35g^0.25/yr
 
+## 図 3.3
+
+```{r 3.3, fig.height=4, fig.width =6}
+plotA()
+```
 
 
-#### BOX 3.2
-
-3.7式で示されたA,K, $L_\infty$ の関係はn=2/3としたとき成り立つ。n=3/4のときの関係を求めておく。
-
-
-
-## Biphasic Growth Equation
+# Biphasic Growth Equation
 
 Von Bertalanffy の式から派生。主な違いは、すべてのエネルギーを成長に使う幼魚と、繁殖も行う成魚の様式を区別した上で統合し、成長式に再生産によるロスを反映できるようにした。
 
 初回成熟時の体重（＝半数成熟体重）の極限体重に対する比率を$\eta_m$とする
 
 - 未成魚の成長　$g_j(w) = Aw^n$
-
 - 成魚の成長　　$g(w) = Aw^n-kw$ ,    $w>\eta_mW_\infty$
 
-両者の間を成熟に関する関数でつなぐ
+- 両者の間を成熟関数でつなぐ
 $$
 \psi_m(w/w_m) = \bigl[1+\bigl(\frac{w}{w_m}\bigr)^{-u}\bigr]^{-1}=\bigl[1+\bigl(\frac{w}{\eta_mW_\infty}\bigr)^{-u}\bigr]^{-1}
 $$
@@ -177,6 +672,7 @@ $\psi(w/w_m)$は、$w<<w_m$ではゼロに、$w>>w_m$では1に近づく。uは�
 $$
 g_{bp}(w)=Aw^n-\psi_m(w/w_m)kw
 $$
+
 ふたたび$k=AW_\infty^{n-1}$を用いて
 $$
 g_{bp}(w) = Aw^n\bigl[1-\psi\bigl(\frac{w}{\eta_mW_\infty}\bigr)\bigl(\frac{w}{W_\infty}\bigr)^{1-n}\bigr]
@@ -185,7 +681,7 @@ $$
 biphasic modelは解析的に解けないが、幼魚期の部分だけとりだせば解析的に解くことができる（Box3.3）
 
 
-### Biphasic model の利点
+# Biphasic model の利点
 - 繁殖への投資を考慮している
 - 再生産が極限体長に対してどのようにスケーリングされるか示している
 
@@ -197,7 +693,7 @@ $$
 
 $\varepsilon_{egg}$ は再生産効率（reproductive efficiency)であり、図3.5から0.22に近似できる。
 
-### Trait based growth model が仮定するもの
+# Trait based growth model が仮定するもの
 
 パラメータ（$A$,　$\varepsilon_{egg}$, $\eta_m$, $n$）は, 種の間で大まかにはinvariantとし、成長と再生産の種の違いを表現する、主たる形質（master trait)として極限サイズ$W_\infty$ を採用した。
 
@@ -207,15 +703,13 @@ $\varepsilon_{egg}$ は再生産効率（reproductive efficiency)であり、図
 
 
 
-## 3.3 成長式においてエネルギーの流れを把握すると
+# 3.3 成長式においてエネルギーの流れを把握すると
 
 biphasic growth modelは、成長と再生産をサイズの関数として記述する。それじたい、一つの朱だけを相手にするには十分だが、今後動的な成長に関する記述を扱うには不十分。それに重要なパラメータである成長効率Aは経験的なデータに頼って決めた。Aは２章で構築した生理学に基づく基本的な仮定とどう結びつくだろう？もうちょい深堀りが必要。
 
 biphasic growth modelの元になるvon bertalanffyの成長式は、同化作用（anabolic)過程:エネルギーの獲得（$Aw^n$) と、異化作用（catabolic)過程：エネルギーの損失（$kw$)の過程から構成され、呼吸はkwに関係すると考えた。彼の成長と代謝に関する解釈は、単純すぎる。損失はエネルギーの獲得過程でも生じるし、再生産による損失は考えていない。
 
-エネルギー代謝を絵に書くと図３．７、数式に書くと以下の式になる。
-
-
+エネルギー代謝を絵に書くと図3.7 数式に書くと以下の式になる。
 
 $$
 C(w)=M_{assim}(w) + M_{std}(w) +M_{act}(w) + R_{egg}(w)/\varepsilon_{egg}+g(w)
@@ -235,29 +729,29 @@ $g(w)$:growth
 
 すべての項は湿重量の関数であり、湿重量はエネルギーに換算できる（１gで5.5KJ）ので、上の式はenergy budgetを表現しているといえる。これらを2章でえたパラメータに置き換えていく。
 
-### Consumption and Assimilation
 
-消費がすべて同化されるわけではなく、エネルギーに使用されずに排出される部分（egestion（消化器系による排泄）、excreation(血液系による排泄）によっるトスがある。排尿)）、消化吸収にかかる代謝的損失による部分がある。すべてのプロセスは消費量に比例しする。Kitchell  el al(1977)は消化行動で15％、egestionで15％、excreationで10％のロスがあると見積もった。この部分を最大消費量に対する損失を表現する係数$\varepsilon_a$として、2章の2.18式にかけると、同化量は以下のように書ける。
+図3.7
+
+
+# Consumption and Assimilation
+
+2章において、消費率は$C(w) = f_0hw^n$ (2.18式)と記述した。ここで摂餌レベル$f_0$ は最大消費レベル$hw^n$の一部としての消費である。消費がすべて同化されるわけではなく、エネルギーに使用されずに排出される損失（ egestion:消化器系による排泄+ excreation:血液系による排泄）、消化吸収に関係する代謝（$M_{assim}$による損失がある。これらは摂餌量に比例する。Kitchell  el al(1977)は消化行動で15％、egestionで15％、excreationで10％のロスがあると見積もった。この部分を最大消費量に対する損失を表現する係数$\varepsilon_a$として、2章の2.18式にかけると、同化量は以下のように書ける。
 $$
 C_{assim}(w) = \varepsilon_af_0hw^n＝C(w)-M_{assim}
 $$
 
-### Standard Metabolism and Activity
+# Standard Metabolism and Activity
 
-standatd metabolism は、生命を維持するために必要な基本的な代謝量であり、
+基礎代謝（$M_{std}$  Standatd metabolism） は、生命を維持するために必要な基本的な代謝量であり、
 
-$$M_{std} = k_sw^n$$と書ける。
-
-一方、activity metabolismは見積もりが難しい。ここはシンプルに、$M_{std}$に比例するとし、その比率は$k_s$に含まれると考える。standard and activity metabolismは、最大消費率$hw^n$に比例すると考えることができ、
-
-$k_s = f_c\varepsilon_ah$ とする。$f_c$は限界摂餌レベルである。生命の維持と摂餌のための代謝はしたがって、ksを限界摂餌レベルの$\varepsilon_ah$　倍として以下のように書くことができる。
+$M_{std} = k_sw^n$ と書ける。一方、activity metabolism($M_{act}$)は見積もりが難しい。ここでは簡単のため$M_{std}$に比例するとしその比率は$k_s$に含まれると考える。すると$M_{std} + M_{act}$は、最大消費レベル$hw^n$に比例すると考えることができるので$k_s = f_c\varepsilon_ah$ と書ける。$f_c$は限界摂餌レベル（これ以下に減らすと生命を維持できないレベル）である。
 $$
 M_{std}(w) + M_{act} = f_c\varepsilon_ahw^n
 $$
 
 Hartvig et al(2011)により、$f_c $ はおよそ0.2とする。
 
-
+# するとAは
 
 さて3.26 式を書き換えて成長を表すようにまとめると、
 $$
@@ -276,7 +770,7 @@ $$
 
 
 
-## 3.4 魚類の生活史を描くMaster traitは他にないのか
+# 3.4 魚類の生活史を描くMaster traitは他にないのか
 
 　成長式に含まれるいろいろなプロセスは、$W_\infty$できまるとしているが、たとえば3.11式からは$W_{\infty}$がAとkで決まるともいえる。Aを一定と考えれば、kをMater traitとし、Aとkから$W_{\infty}$を決めることもできる。なぜそうしないか？
 
@@ -284,42 +778,46 @@ $$
 - data-limitedな資源でも推定可能→data-poorな資源にもモデルを応用できる。
 - 直感的（intuitive)にわかりやすい。$W_{\infty}=10kg$といわれるとそりゃ魚食性魚類だろうと想像できるが、$k=0.44/yr$といわれてもピンとこない。
 
-　本章の個体成長モデルは、生活史に関わる多くの重要なパラメータが$W_{\infty}$　と（または） Aに比例するから、Aと$W_\infty$ が決まればその他のパラメータを決めることができる。理論的には正しいが、データ解析からは明確にその関係を示せていない。$W_\infty$ と$W_m$ (成熟サイズ) の比率は種によってかなり異なるが、これをinvariantsといえるだろうか？　この疑問には3つの観点から答えることができよう、semantic（意味論的）、empiric(経験的)、thoretic(理論的)に。
+　本章の個体成長モデルは、生活史に関わる多くの重要なパラメータが$W_{\infty}$　と（または） Aに比例するから、Aと$W_\infty$ が決まればその他のパラメータを決めることができる。理論的には正しいが、データ解析からは明確にその関係を示せていない。$W_\infty$ と$W_m$ (成熟サイズ) の比（$\eta_m$)は種によってかなり異なるが、これをinvariantsといえるだろうか？　この疑問には3つの観点から答えることができよう、semantic（意味論的）、empiric(経験的)、thoretic(理論的)に。
 
-　ある測定値（$W_\infty /W_m$ など）が”invariant”ということは、種間で異ならないということではなく、その形質がほかの形質（成長速度、水温などの環境、系統発生学的な位置関係）と”co-vary”ではないことを意味する。つまり、現段階では種による変動はランダムで予測不能ということ。（生活史パラメータが基本的にinvariantであるという誤解をさけるためには、life history parameterといったほうがよかろう）。
+　ある形質（$W_\infty$と$ W_m$ の比など）が”invariant”ということは、種によって異ならないということではなく、その形質がほかの形質（成長速度、水温などの環境、系統発生学的な位置関係）と”co-vary”ではないことを意味する。現段階では、invariantとされる形質の種による変動はランダムで、他の形質との関係で説明できない予測不能であるということだ。生活史パラメータが基本的にinvariantであるという誤解をさけるためには、life history parameterといったほうがよかろう。
 
-　経験的には、データに限界があることを忘れてはいけない。パラメータのいくつかは直接推定されていない。たとえばAであるが、これは個々の推定されたvon Bertalanffy の成長曲線から推定したKと$L_{\infty}$から得たもので、考慮していないバイアスが含まれるだろうし、システマティックなバイアスもあるだろう。
+　経験的には、データに限界があることを忘れてはいけない。パラメータのいくつかは直接推定されていない。たとえばAであるが、これは個々の推定されたvon Bertalanffy の成長曲線から推定したKと$L_{\infty}$から得たもので、考慮していないバイアスが含まれるだろうし、systematicなバイアスもあるだろう。
 
-　それに成長曲線の多くは１個体のそれではなく、年齢あたりサイズの平均である。もし速い成長が高い死亡率につながるのであれば、高齢になるほどデータは遅い成長の個体のものでしめられ、結果にバイアスが生じる。再生産投資などは推定自体難しい。生殖腺重量は繁殖投資のプロキシではあるが、年間の繁殖投資を推定するには、一年に何回産卵するか、摂密度によって産卵はどのように変化するか、skip spawnerがどれくらいいるか、産卵回遊や産卵行動にどれくらいの投資が必要か、など知る必要がある。これらが適切に考慮されたとしても、理論値からの残差は十分説明できないだろう。
+　それに成長曲線の多くは１個体のそれではなく、年齢あたりサイズの平均である。もし速い成長が高い死亡率につながるのであれば、高齢になるほどデータは遅い成長の個体のもので占められ、結果にバイアスが生じる。再生産投資などは推定自体が難しい。生殖腺重量は繁殖投資のプロキシではあるが、年間の繁殖投資を推定するには、一年に何回産卵するか、摂密度によって産卵はどのように変化するか、skip spawnerがどれくらいいるか、産卵回遊や産卵行動にどれくらいの投資が必要か、など知る必要がある。これらが適切に考慮されたとしても理論値からの残差は十分説明できないだろう。
 
-　きっと考慮できていない形質による変動があるのだ。それが図3.3にみられるような・・・成長速度の10倍の変動幅をもたらすような。それがなにかはわからないが、仮説はたてられる。候補になるtrait axisの一つは　slow-fast life history continuum である。
+　きっと考慮できていない形質で説明される変動があるのだ。それが図3.3にみられるような・・・成長速度の10倍の変動幅をもたらすような。それがなにかはわからないが、仮説はたてられる。候補になるtrait axisの一つは　slow-fast life history continuum である。
 
 成長がおそい→餌が取れない＆clearance rateが小さい→活動量（activity）が小さい→$f_c$ (個体維持に最低限必要な摂餌レベル)が小さい（逆に成長が速いと$f_c$が大きくなる）
 
 　→$f_c$は定数でなく、A($=\varepsilon_ah(f_0-f_c)$)も変わる。
 
-clearance rate を正確に推定するのは難しいし、Niel Gerner Andersonの言葉を借りれば　enegy budgetのダークホースである活動量（activity coefficient)についての知識も乏しい。このためトレードオフが明確でない。
+clearance rate を正確に推定するのは難しいし、Niel Gerner Andersonの言葉を借りれば　enegy budgetのダークホースである活動量（activity coefficient)についての知識も乏しい。実際にトレードオフが明確に観測されていないのはこのような知識の乏しさによるだろう。
 
 　もうひとつの候補になる形質は防御への投資である。身を守るための棘を持ったり、擬態したり、隠れたりといった戦略にはそれぞれコストがかかる。隠れるということはその間、餌を得ることを我慢しなくてはならない。そのためのコストもある。防御形質が持つトレードオフは、slow-fast life　history continuumよりさらに扱いにくい。防御への投資と死亡率のトレードオフは後の章であつかう
 
 　これらのトレードオフが定量されれば、図3.3にみられるような誤差をいくぶん小さくすることはできるだろう。しかし考慮すべき形質が増えるとモデルは複雑になっていくので、大きな意味のある改善がみとめられない限り、考慮すべき形質は可能な限り少ないほうが良い。この点は9章でまた議論するとして、最小モデルのMaster traitとして極限サイズを用いることとする。
 
+# 3.5 Summary
 
+この章では vBモデルをもとにしたbiphasic growth modelを構築した。このモデルは成長と再生産（繁殖）が極限サイズが異なる魚種間でどのように変化するかを示す：極限サイズが大きい魚種は、サイズあたりの繁殖投資が少ない。
 
-##3.5 まとめ
-
-para1
-
-この章では von Bertalanffy　likeなbiphasic growth modelを構築した。このモデルは成長と再生産（繁殖）が種によってどれくらい変化するかを、極限サイズによって示すことができる。
-
-極限サイズが大きい→サイズあたりの繁殖投資が少ない。
-
-成長に関するその他のみかたも、パラメータのセットをつかって説明できる。これらパラメータは種の間でかならずしもinvariantではないが、極限サイズとの関係においてはsystematicな変化はない。かくして極限サイズは<span style="color:dark red;"> Master trait</span>となりうる。
-
-
+成長に関するその他のみかたも、パラメータのセットをつかって説明できる。これらパラメータは種の間でかならずしもinvariantではないが、極限サイズとの関係においてsystematicな変動はない。このため極限サイズは<span style="color:dark red;"> Master trait</span>となりうるのだ。
 
 para2
-本章の成長モデルはvBのモデルとは一致しない。とくにJuvenile stageでの予測値はvBのそれより小さい。VBモデルは成長データをよく代表するものとして受け入れられてきたので残念である。この違いは、吸収と基礎代謝による損失においてn=3/4を用いたことに由来する。
+本章の成長モデルはvBのモデルとは一致しない。とくにJuvenile stageでの予測値はvBの予測値より小さくなる。vBモデルは成長データをよく代表するものとして受け入れられてきたので残念である。この違いは、吸収と基礎代謝による損失においてn=3/4を用いたことに由来する。この選択は、代謝がサイズによってどのようにスケーリングされるかという現在の認識に従うと（つまりスケーリングに関する現在の研究の流れからすると）完璧ではない。基礎代謝のスケールは3/4より大きいという報告がある（Killen, et al. 2007). 活動(activity)のスケールは実測が難しいが、理論的に3/4より大きいという考察がなされている（Ware1978）。juvenile stageのスケーリング指数を3/4より高くすれば、BP成長モデルの推定値はよりvBモデルに近くなる。したがって、BP成長モデルを改善するならば、明示的に代謝によるエネルギーの損失の項を設け、獲得の項とは異なるスケールを与えることになろう。あるいは、スケールを増やしたくない（nとも１とも異なるスケールを加えたくない）ならば、代謝による損失を catabolic termに含めることになろう。
+
+para3 
+
+activityなどによる損失のスケールに3/4以上を用いない重要な理由は、損失のスケールをエネルギー獲得のためのスケールより大きくすると、すべての魚の$W_\infty$を制限することになるためである。この制限は図3.1bに示されている。$W_\infty$ が大きいということは、損失にかかる係数は小さいということを意味する。
+
+もしすべての魚種の$W_\infty$が1トンならば、3.17式から、係数ｋは$A(1 ton)^{0.25}\approx 0.17yr^{-1}$ より大きくはならない。これが10kgなら0.54，10gなら3.0であり、小型の魚種にとっては取るに足らない数字になる。あるいは、この損失項（Massim+Mstd+Mact)の係数が定数でなく、サイズによって変化すると考えたらどうだろう？しかし基礎代謝や活動のための代謝が大きい魚ほど小さくなるだろうか？むしろ代謝率は他の形質に関係すると見たほうが良い。もし代謝がサイズに依存するということが言えるようになったら、極限体長への依存性を維持することは問題にならなくなる。その場合はもっと高い精度と複雑なモデルが必要になる、ursin(1967)のような。
+
+(para4)
+
+本章のモデル構築での選択は、以下に述べる私の意図に沿うものである。つまり、筋の通った一般性のある理論を構築するため、ある程度精度を犠牲にしている。この犠牲によって成長と再生産を極限サイズの関数として表現することが可能になり、極限サイズの変動から様々な魚類資源について一般性のある記述が可能になる。この恩恵は、今後の章で受けることになる。そこでは形質ベースの成長と再生産のモデルによって、様々な魚類資源に対する漁業のサイズ依存的なインパクトを明らかにできる。結論として3.18式と3.30式は完璧ではない。しかしシンプルなサイズベースの成長式を構築し、すべての変動（変異性）をMaster traitとしての極限体長で示そうという目的を、もっともよく果たすものである。
+
+
 
 ```{r testcalc, include = FALSE}
 A = 5.35
@@ -334,6 +832,5 @@ A*W10^(n-1)
 
 ```
 
-para3
-para4
+
 
