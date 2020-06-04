@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="ちっっか" />
+  <meta name="dcterms.date" content="2020-06-02" />
+  <title>chapter 3</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="chapter3p_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+
+<link rel="stylesheet" href="chapter3p_files/reveal.js-3.3.0.1/css/theme/sky.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">chapter 3</h1>
+  <h1 class="subtitle"><span style="font-size:32pt">だよーん</span></h1>
+    <h2 class="author">ちっっか</h2>
+    <h3 class="date">20200602</h3>
+</section>
+
+<section id="はじめに" class="slide level2">
+<h2>はじめに</h2>
+<p>問題：個体は摂餌から得られるエネルギーをどう利用するか？</p>
+<p>解決のため</p>
+<ol type="1">
+<li>個体の成長と再生産を記述する</li>
+<li>極限サイズをmaster trait（支配的な形質）とする</li>
+<li>個体のサイズ、極限サイズ、生活史パラメータに関するエネルギー収支のパラメータを決定する</li>
+</ol>
+</section>
+<section id="個体は摂餌から得られるエネルギーをどう利用するか" class="slide level2">
+<h2>個体は摂餌から得られるエネルギーをどう利用するか？</h2>
+<ul>
+<li>Size spectrum theoryをpopulationまで発展させるために個体についてより詳細に記述する必要</li>
+<li>個体のサイズの関数としてエネルギー収支（energy budget)を表現し、摂餌率（consumption rate)から成長率（growth rate）と再生産率（reproduction rate)を決定する</li>
+</ul>
+<p>Enegy budget 個体の中での質量とエネルギーの流れ Assimilation losses+Metabolic losses+Enegy spent on growth and reproduction</p>
+</section>
+<section id="master-trait" class="slide level2">
+<h2>Master trait</h2>
+<ul>
+<li>魚類の多様な生態の表現には多くのパラメータが必要↔︎シンプルな理論構築には邪魔</li>
+<li>Life-history invariants を利用してパラメータを減らし、最終的に種によって変化するパラメータは極限サイズ（<span class="math inline">\(W_\infty\)</span>）に絞られた。これは生活史の多様さを特徴づけるmaster trait の役割を果たすパラメータである。</li>
+</ul>
+<pre><code>Life History Invariants：生活史においてkeyになる無次元の重要パラメータが異なる種間系統間で一定値をとるとき、そのパラメータ</code></pre>
+</section>
+<section id="the-von-bertallanffy-growth-model" class="slide level2">
+<h2>3.1 The von Bertallanffy growth model</h2>
+<p>本章では、成熟前と成熟後の異なる成長様式を一つのモデルで記述する(biphasic growth model) - 成熟前：エネルギーをすべて成長に使う - 成熟後：エネルギーを成長と再生産に使う</p>
+<p>再生産にかかるコストを考慮した成長モデルがのちの章で必要になる。 最初に、もとになるvon Bertalanffyの成長式を詳しく見ていく</p>
+</section>
+<section id="von-bertalanffy-growth-modelとは" class="slide level2">
+<h2>von Bertalanffy growth modelとは</h2>
+<p>同化作用(anabolic)と異化作用(catabolic)のプロセスから構成される</p>
+<p><span class="math display">\[
+\frac{dw}{dt}= Aw^n-kw\tag{3.1}
+\]</span></p>
+<p><span class="math inline">\(Aw^n\)</span> :エネルギーの獲得(accuisition, anabolic) <span class="math inline">\(kw\)</span> :エネルギーの損失(losses, catabolic)　</p>
+<p>いずれも体重のべき乗（ｎと１）に比例する。</p>
+</section>
+<section id="nについて" class="slide level2">
+<h2>nについて</h2>
+<ul>
+<li>エネルギーの獲得は同化作用の過程によって決まる</li>
+<li>同化作用は胃や腸など組織の表面積からの、酸素や食料の吸収と解釈</li>
+<li>シンプルな2/3乗則に従うと考えた（２章で議論済）</li>
+</ul>
+</section>
+<section id="式の導出" class="slide level2">
+<h2>式の導出</h2>
+<p>数式（１）は<span class="math inline">\(w=cl^3\)</span>の関係を使って以下の様にかける(Box3.1) <span class="math display">\[
+\frac{dl}{dt} = K(L_\infty-l)\tag{3.5}
+\]</span> ここで<span class="math inline">\(K= k/3\)</span>, <span class="math inline">\(L_\infty=c^{-1/3}Ak\)</span></p>
+<p>これを解くと（例えば赤嶺****）von Bertalanffy の成長式になる <span class="math display">\[
+l(t) = L_\infty(1-e^{-K_t})\tag{3.6}
+\]</span> K：growth constany（時間あたり）, <span class="math inline">\(L_\infty\)</span>：極限体長</p>
+</section>
+<section id="klとakc-の関係" class="slide level2">
+<h2>K,L∞と、A,k,c の関係</h2>
+<p>また3.4式を<span class="math inline">\(w=cl^3\)</span>を用いて変形すると <span class="math display">\[
+\frac{dw}{dt}=\frac{dcl^3}{dt}=3cl^2\frac{dl}{dt}=Aw^n-kw
+\]</span></p>
+<p><span class="math display">\[
+\frac{dl}{dt} = \frac{1}{3cl^3}A(cl^3)^n-\frac{kcl^3}{3cl^3}
+\]</span> ここでn=2/3 ならば <span class="math display">\[
+\frac{dl}{dt}=\frac{1}{3}C^{-1/3}A-\frac{k}{3}l =\frac{k}{3}\bigl(\frac{c^{-1/3}A}{k}-l\bigr)
+\]</span> となり、<span class="math inline">\(K=\frac{k}{3}\)</span>, <span class="math inline">\(L_\infty = \frac{c^{-1/3}A}{k}\)</span> となる</p>
+</section>
+<section id="図3.1" class="slide level2">
+<h2>図3.1　</h2>
+<p>初期の成長は傾き<span class="math inline">\(KL_\infty\)</span>の直線似近く（斜めの破線）、<span class="math inline">\(l\)</span>が<span class="math inline">\(L_\infty\)</span>に近づくと成長が止まる（横の破線）。</p>
+<p><img data-src="vB2.png" title="fig1" /></p>
+<p>この成長式はシンプルで、年齢あたりのサイズの変化によく一致し、体長という測定しやすい変数を用いたという点で大いに成功した。</p>
+</section>
+<section id="von-bertallanfy-式の問題" class="slide level2">
+<h2>von Bertallanfy 式の問題</h2>
+<ul>
+<li><span class="math inline">\(K\)</span>と<span class="math inline">\(L_\infty\)</span>に相関関係がある（負、図3.2）
+<ul>
+<li><p><span class="math inline">\(L_\infty\)</span>の誤差は<span class="math inline">\(K\)</span>に影響し、往々にして<span class="math inline">\(L_\infty\)</span>の不確実性は高い</p>
+<p>（いっぽうが過大推定されると、もう一方は過小推定される）</p></li>
+<li><p>Aを確かな筋から推定できれば、<span class="math inline">\(L_\infty\)</span>の不確実性の<span class="math inline">\(K\)</span>への影響は制限されるだろう</p></li>
+</ul></li>
+<li>nは3/4のほうがいい -　von Bertallanfy は、Haldanes(1928)を読むべきであった -　West(1997)は、代謝を表す体重のべき数に3/4乗則を採用した -　この本でも代謝生態学の流れに従い、代謝のべき数として3/4を採用する</li>
+</ul>
+</section>
+<section id="master-traitとして極限サイズ" class="slide level2">
+<h2>3.2 Master Traitとして極限サイズ</h2>
+<p>von Bertalanffy の成長式は、エネルギーの獲得と損失の重要性が年齢や体のサイズによって変化することで形が決まる。</p>
+<p>図3.1b　体が大きくなるほどAw0.75は増えていくがkwも増えていき、両者が一致するところで成長が止まる。</p>
+<p>年齢が重なり体が大きくなると、損失が大きくなって成長にエネルギーが回らなくなり、それ以上サイズは増えなくなる（極限サイズ）</p>
+<p>このときの関係は以下のようにかける <span class="math display">\[
+W_\infty=\bigl(\frac{A}{k}\bigr)^\frac{1}{1-n}
+\]</span></p>
+</section>
+<section id="aの決定" class="slide level2">
+<h2>Aの決定</h2>
+<p>AとkにはW∞の決定においてトレードオフの関係がある。</p>
+<p>式3.4と上の式を使うと、種による成長の違いは、AとW∞だけで記述できる <span class="math display">\[
+\frac{dw}{dt}=Aw^n\bigl[1-\bigl(\frac{w}{W_\infty}\bigr)^{1-n}\bigr]
+\]</span> (この式は体重の増加を示した成長式で、W∞とAだけで記述できる)</p>
+<p>Aはエネルギーの獲得と同化のプロセスを表現する成長係数であり、このプロセスは種の極限体長とは関係しないと期待できる。</p>
+<p>Aの値を決めるために、von Bertalanffy 成長式で推定された<span class="math inline">\(K\)</span> と<span class="math inline">\(L_\infty\)</span>の値に頼るとしよう（図3.3）。</p>
+<p><span class="math inline">\(KL_\infty\)</span>とAの関係は、<span class="math inline">\(n=2/3\)</span>で確認されているのであるが、box3.2から、<span class="math inline">\(n=3/4\)</span>でも概ねOK。</p>
+<p>図3.3をみると、大雑把に見ればAは<span class="math inline">\(W_\infty\)</span>に対して独立のようである。データは同じ極限サイズでも成長速度は2倍近くことなることも示す。実際にはAは極限サイズが大きくなるにつれて若干増加する。これは大型の種は小型の種より成長が速いことを示す。速い成長は高い体温、高い代謝を伴い、それはサバ科魚類に多い。そして実際、サバ科魚類は大型魚種の主要な種である。</p>
+<p>以下では単純のため、Aは一定として扱う。A=5.35g^0.25/yr</p>
+</section>
+<section id="biphasic-growth-equation" class="slide level2">
+<h2>Biphasic Growth Equation</h2>
+<p>Von Bertalanffy の式から派生。主な違いは、すべてのエネルギーを成長に使う幼魚と、繁殖も行う成魚の様式を区別した上で統合し、成長式に再生産によるロスを反映できるようにした。</p>
+<p>初回成熟時の体重（＝半数成熟体重）の極限体重に対する比率を<span class="math inline">\(\eta_m\)</span>とする</p>
+<p>未成魚の成長　<span class="math inline">\(g_j(w) = Aw^n\)</span></p>
+<p>成魚の成長　　<span class="math inline">\(g(w) = Aw^n-kw\)</span> , <span class="math inline">\(w&gt;\eta_mW_\infty\)</span></p>
+<p>両者の間を成熟関数でつなぐ <span class="math display">\[
+\psi_m(w/w_m) = \bigl[1+\bigl(\frac{w}{w_m}\bigr)^{-u}\bigr]^{-1}=\bigl[1+\bigl(\frac{w}{\eta_mW_\infty}\bigr)^{-u}\bigr]^{-1}
+\]</span> <span class="math inline">\(\psi(w/w_m)\)</span>は、<span class="math inline">\(w&lt;&lt;w_m\)</span>ではゼロに、<span class="math inline">\(w&gt;&gt;w_m\)</span>では1に近づく。uはその変化の強さを決めるペラメータ（図3.4bの立ち上がり＝steepnessを決める）</p>
+<p>成熟関数を導入することにより、以下のように生活史の異なるphaseを一つの式でまとめることができる。 <span class="math display">\[
+g_{bp}(w)=Aw^n-\psi_m(w/w_m)kw
+\]</span> ふたたび<span class="math inline">\(k=AW_\infty^{n-1}\)</span>を用いて <span class="math display">\[
+g_{bp}(w) = Aw^n\bigl[1-\psi\bigl(\frac{w}{\eta_mW_\infty}\bigr)\bigl(\frac{w}{W_\infty}\bigr)^{1-n}\bigr]
+\]</span></p>
+<p>biphasic modelは解析的に解けないが、幼魚期の部分だけとりだせば解析的に解くことができる（Box3.3）</p>
+<h3 id="biphasic-model-の利点">Biphasic model の利点</h3>
+<ul>
+<li>繁殖への投資を考慮している</li>
+<li>再生産が極限体長に対してどのようにスケーリングされるか示している</li>
+</ul>
+<p>繁殖への投資のべき数は負であるので、極限体長が大きくなるほど体重あたりの繁殖への投資は減少する。この減少のパターンは図3.5に示すように、観察されている。 繁殖投資kwは卵の生産だけでなく、他の繁殖に関わる要素：産卵回遊など　にも使われる。これらその他の繁殖に要するエネルギーも個体の産卵量（ <span class="math inline">\(R_egg\)</span> 個体あたり時間あたり卵量）に比例すると考えて、 <span class="math display">\[
+R_{egg} = \varepsilon_{egg}kw = \varepsilon_{egg}AW^{n-1}_\infty
+\]</span></p>
+<p><span class="math inline">\(\varepsilon_{egg}\)</span> は再生産効率（reproductive efficiency)であり、図3.5から0.22に近似できる。</p>
+<h3 id="trait-based-growth-model-が仮定するもの">Trait based growth model が仮定するもの</h3>
+<p>パラメータ（<span class="math inline">\(A\)</span>,　<span class="math inline">\(\varepsilon_{egg}\)</span>, <span class="math inline">\(\eta_m\)</span>, <span class="math inline">\(n\)</span>）は, 種の間で大まかにはinvariantとし、成長と再生産の種の違いを表現する、主たる形質（master trait)として極限サイズ<span class="math inline">\(W_\infty\)</span> を採用した。</p>
+<p>これにより、小さい魚と大きな魚の違いについて一般化した記述が可能になる（general statementを作ることができる）。</p>
+<p>もちろん<span class="math inline">\(W_\infty\)</span>以外の形質についても種特異的な値を用いれば、その種のより正確な成長式を得ることができる。</p>
+</section>
+<section id="成長式においてエネルギーの流れを把握すると" class="slide level2">
+<h2>3.3 成長式においてエネルギーの流れを把握すると</h2>
+<p>biphasic growth modelは、成長と再生産をサイズの関数として記述する。それじたい、一つの朱だけを相手にするには十分だが、今後動的な成長に関する記述を扱うには不十分。それに重要なパラメータである成長効率Aは経験的なデータに頼って決めた。Aは２章で構築した生理学に基づく基本的な仮定とどう結びつくだろう？もうちょい深堀りが必要。</p>
+<p>biphasic growth modelの元になるvon bertalanffyの成長式は、同化作用（anabolic)過程:エネルギーの獲得（<span class="math inline">\(Aw^n\)</span>) と、異化作用（catabolic)過程：エネルギーの損失（<span class="math inline">\(kw\)</span>)の過程から構成され、呼吸はkwに関係すると考えた。彼の成長と代謝に関する解釈は、単純すぎる。損失はエネルギーの獲得過程でも生じるし、再生産による損失は考えていない。</p>
+<p>エネルギー代謝を絵に書くと図３．７、数式に書くと以下の式になる。</p>
+<p><span class="math display">\[
+C(w)=M_{assim}(w) + M_{std}(w) +M_{act}(w) + R_{egg}(w)/\varepsilon_{egg}+g(w)
+\]</span></p>
+<p><span class="math inline">\(C(w)\)</span> :consumption</p>
+<p><span class="math inline">\(M_{assim}(w)\)</span>: assimilation</p>
+<p><span class="math inline">\(M_{std}(w)\)</span>: standard metabolism</p>
+<p><span class="math inline">\(M_{act}(w)\)</span> :activity</p>
+<p><span class="math inline">\(R_{egg}(w)/\varepsilon_{egg}\)</span>:reproduction</p>
+<p><span class="math inline">\(g(w)\)</span>:growth</p>
+<p>すべての項は湿重量の関数であり、湿重量はエネルギーに換算できる（１gで5.5KJ）ので、上の式はenergy budgetを表現しているといえる。これらを2章でえたパラメータに置き換えていく。</p>
+<h3 id="consumption-and-assimilation">Consumption and Assimilation</h3>
+<p>消費がすべて同化されるわけではなく、エネルギーに使用されずに排出される部分（egestion（消化器系による排泄）、excreation(血液系による排泄）によっるトスがある。排尿)）、消化吸収にかかる代謝的損失による部分がある。すべてのプロセスは消費量に比例しする。Kitchell el al(1977)は消化行動で15％、egestionで15％、excreationで10％のロスがあると見積もった。この部分を最大消費量に対する損失を表現する係数<span class="math inline">\(\varepsilon_a\)</span>として、2章の2.18式にかけると、同化量は以下のように書ける。 <span class="math display">\[
+C_{assim}(w) = \varepsilon_af_0hw^n＝C(w)-M_{assim}
+\]</span></p>
+<h3 id="standard-metabolism-and-activity">Standard Metabolism and Activity</h3>
+<p>standatd metabolism は、生命を維持するために必要な基本的な代謝量であり、</p>
+<p><span class="math display">\[M_{std} = k_sw^n\]</span>と書ける。</p>
+<p>一方、activity metabolismは見積もりが難しい。ここはシンプルに、<span class="math inline">\(M_{std}\)</span>に比例するとし、その比率は<span class="math inline">\(k_s\)</span>に含まれると考える。standard and activity metabolismは、最大消費率<span class="math inline">\(hw^n\)</span>に比例すると考えることができ、</p>
+<p><span class="math inline">\(k_s = f_c\varepsilon_ah\)</span> とする。<span class="math inline">\(f_c\)</span>は限界摂餌レベルである。生命の維持と摂餌のための代謝はしたがって、ksを限界摂餌レベルの<span class="math inline">\(\varepsilon_ah\)</span>　倍として以下のように書くことができる。 <span class="math display">\[
+M_{std}(w) + M_{act} = f_c\varepsilon_ahw^n
+\]</span></p>
+<p>Hartvig et al(2011)により、$f_c $ はおよそ0.2とする。</p>
+<p>さて3.26 式を書き換えて成長を表すようにまとめると、 <span class="math display">\[
+g(w) = \varepsilon_af_0hw^n -f_c\varepsilon_ahw^n-\psi(w/w_m)kw
+\]</span></p>
+<p><span class="math display">\[
+g(w) = \varepsilon_ah(f_0-f_c)w^n-\psi(w/w_m)kw
+\]</span></p>
+<p><span class="math display">\[
+A=\varepsilon_ah(f_0-f_c)
+\]</span></p>
+<p>となる。<span class="math inline">\(\varepsilon_a, f_0, fc, h\)</span>　の定数は、種によって大きく違わない(life history invariantsである）ことが期待される。なので成長係数Aは一定と扱うことができる（じつは<span class="math inline">\(f_0\)</span>は4章のモデルにより一定とは言えないことがわかってるんだけど）。</p>
+</section>
+<section id="魚類の生活史を描くmaster-traitは他にないのか" class="slide level2">
+<h2>3.4 魚類の生活史を描くMaster traitは他にないのか</h2>
+<p>　成長式に含まれるいろいろなプロセスは、<span class="math inline">\(W_\infty\)</span>できまるとしているが、たとえば3.11式は<span class="math inline">\(W_{\infty}\)</span>がAとkで決まることを示している。Aを一定と考えれば、kをMater traitとし、kから<span class="math inline">\(W_{\infty}\)</span>を決めることもできる。なぜそうしないか？使いやすく推定が楽。data-limitedな資源でも推定可能→data-poorな資源にもモデルを応用できる。直感的（intuitive)にわかりやすい。<span class="math inline">\(W_{\infty}=10kg\)</span>といわれるとそりゃ魚食性魚類だろうと想像できるが、<span class="math inline">\(k=0.44/yr\)</span>といわれてもピンとこない。</p>
+<p>　本章の個体成長モデルは、生活史に関わる多くの重要なパラメータが<span class="math inline">\(W_{\infty}\)</span>　and/or Aに比例することを示唆することから、この2つのパラメータが決まればその他のパラメータを決めることができるといえる。理論的には正しいのだけど、データ解析からは明確にその関係を示すことはできていない。life-history invariantsが本当にinvariantsであると断言できるだろうか？　この疑問には3つの観点から答えることができよう、semantic（意味論的）、empiric(経験的)、thoretic(理論的)に。</p>
+<p>　ある測定値（成熟サイズの極限サイズに対する比率とか）をinvariantとみなす、ということの意味は、それが種の間で異ならないということではない。そうではなく、そのパラメータがほかの形質（たとえば成長速度とか、水温などの環境、系統発生学的に近い種は変動幅が似ているとかなど）とco-varyではないことを意味する。life-history invariantという言葉を使うことはすなわち生活史が種によって異ならないことを意味するのではなく、現在の理解のレベルでは、種による変動はランダムで予測不可能ということである。生活史パラメータが基本的にinvariantであるという誤解をさけるためには、life history parameterといったほうがよかろう。</p>
+<p>　経験的には、データに限界があることを忘れてはいけない。パラメータのいくつかは直接推定されていない。たとえばAであるが、これは個々の推定されたvon Bertalanffy の成長曲線から推定したKと<span class="math inline">\(L_{\infty}\)</span>から得たもので、考慮していないバイアスが含まれるだろうし、システマティックなバイアスもあるだろう。</p>
+<p>　それに成長曲線の多くは１個体のそれではなく、年齢あたりサイズの平均である。もし速い成長が高い死亡率につながるのであれば、高齢になるほどデータは遅い成長の個体のものでしめられ、結果にバイアスが生じる。再生産投資などは推定自体難しい。生殖腺重量は繁殖投資のプロキシではあるが、年間の繁殖投資を推定するには、一年に何回産卵するか、摂密度によって産卵はどのように変化するか、skip spawnerがどれくらいいるか、産卵回遊や産卵行動にどれくらいの投資が必要か、など知る必要がある。これらが適切に考慮されたとしても、理論値からの残差は十分説明できないだろう。</p>
+<p>　なので、きっと考慮にいれていない形質があり、それが図3.3にみられるような・・・成長速度の10倍の変動幅をもたらすような形質があるのた。それがなにかはわからないが、仮説はたてられる。候補になるtrait axisの一つは　slow-fast life history continuum である。</p>
+<p>成長がおそい→餌が取れない→ひくいclearance rate→低い活動量→低い限界摂餌レベル</p>
+<p>clearance rate を正確に推定するのは難しいし、Niel Gerner Andersonの言葉を借りれば　enegy budgetのダークホースである活動係数についての知識も乏しい。</p>
+<p>このような情報の乏しさが、追加の候補となる形質の背後にあるトレードオフが明確にされていないことの主な要因だ。</p>
+<p>　もうひとつの候補になる形質は防御への投資である。身を守るための棘を持ったり、擬態したり、隠れたりといった戦略にはそれぞれコストがかかる。隠れるということはその間、餌を得ることを我慢しなくてはならない。そのためのコストもある。防御形質が持つトレードオフは、slow-fast lifehistory continuumよりさらに扱いにくい。防御への投資と死亡率のトレードオフは後の章であつかう</p>
+<p>　これらのトレードオフが定量されれば、図3.3にみられるような誤差をいくぶん小さくすることはできるだろう。しかし考慮すべき形質が増えるとモデルは複雑になっていくので、大きな意味のある改善がみとめられない限り、考慮すべき形質は可能な限り少ないほうが良い。この点は9章でまた議論するとして、最小モデルのMaster traitとして極限サイズを用いることとする。</p>
+<p>##3.5 まとめ</p>
+<p>para1</p>
+<p>この章では von Bertalanffy　likeなbiphasic growth modelを構築した。このモデルは成長と再生産（繁殖）が種によってどれくらい変化するかを、極限サイズによって示すことができる。</p>
+<p>極限サイズが大きい→サイズあたりの繁殖投資が少ない。</p>
+<p>成長に関するその他のみかたも、パラメータのセットをつかって説明できる。これらパラメータは種の間でかならずしもinvariantではないが、極限サイズとの関係においてはsystematicな変化はない。かくして極限サイズは<span style="color:dark red;"> Master trait</span>となりうる。</p>
+<p>para2</p>
+<p>para3 para4</p>
+</section>
+    </div>
+  </div>
+
+  <script src="chapter3p_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="chapter3p_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: false,
+        // Enable the slide overview mode
+        overview: true,
+        // Vertical centering of slides
+        center: true,
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'none', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 960,
+        height: 720,
+
+
+
+        // Optional reveal.js plugins
+        dependencies: [
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
