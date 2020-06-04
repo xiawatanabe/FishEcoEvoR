@@ -1,0 +1,8 @@
+https://shohei-doi.github.io/quant_polisci/index.html ←ここが便利
+
+install.packages("tinytex")
+
+tinytex::install_tinytex()
+
+revealjsで、htmlで良さげ↓
+https://kazutan.github.io/kazutanR/Rmd_intro.html#revealjs%E3%81%AE%E4%BD%BF%E3%81%84%E6%96%B947
