@@ -455,31 +455,57 @@ document.getElementsByTagName('head')[0].appendChild(style);
     <h3 class="date">2020/6/8</h3>
 </section>
 
-<section id="背景" class="title-slide slide level1"><h1>背景</h1><p>(para1) Size spectrum theoryをpopulationまで発展させるために個体についての詳細な記述が必要。 エネルギー収支をサイズの関数として表現し、吸収率(consumption rate)から成長・再生産率を決める。 これにより個体が獲得したエネルギーをどのように利用するか記述する。 (para2) 成長率をエネルギー収支から決めようという取り組みは20世紀初頭から試みられてきた。 von Bertalanffy(1957)：Quantitative Laws in Growth and Metabolismにおいて強力なツールであるvon Bertalanffy の成長式が開発され、これが本章で用いるBiphasic Growth modelの基礎となる（Ursin, 1979などなど） エネルギー収支は集団の中の個体を記述するパラメータに依存する。 最もシンプルな成長モデル（vBモデルのような）は、2つのパラメータで構成されるが、より複雑なモデルはより多くのパラメータを必要とする。 魚類は実に多様な生活史パターンを示すので、複雑なモデルのほうがよくそれらを表現する。 しかしシンプルな理論を構築するという見地からは、パラメータが多いとシンプルな関係を明らかにするのを困難にする。 そこで、いわゆるlife history invariantsを使ってパラメータを減らしていく。 life history invariants とは、魚種間で”systematically”に変動しないパラメータのことである。 これはたいへんうまいやりかたで、not invariantな（つまり魚種間で変動する）パラメータをasymptotic sizeに絞ることができる。 このパラメータは魚類の生活史の変異の殆どを特徴づけるMaster Traitの役割を果たす。 (para3) このエネルギー収支は個体のなかの質量とエネルギーの流れのすべてを考慮する。成長と再生産に使われるエネルギーと同様、 消化と代謝による損失も扱う。 エネルギー収支は、個体による、個体の状態（飢餓、サイズ、成熟）とその生活史戦略に従う決定によって構築される。 これらの決定は、個体の適応度を最適化するための生活史最適化の枠組みと理解できるだろう。 そのような理論の断片的に検討されてきた。 例えば再生産スケジュールなど。しかし完成されたものは明らかにされていない。 したがって、大部分経験的にもとめられた生活史パラメーターに頼ることになる。 この章の目的は以下のとおりである。 1. 個体の成長と再生産を表現する 2. 極限サイズをmaster traitとして確立する 3. 個体サイズ、極限サイズおよび生活史パラメータに関係づけてエネルギー収支のパラメータを決定する</p></section>
-<section id="the-von-bertallanffy-growth-model" class="title-slide slide level1"><h1>3.1 The von Bertallanffy growth model</h1><p>本章では、成熟前と成熟後の異なる成長様式を一つのモデルで記述する(biphasic growth model) - 成熟前：エネルギーをすべて成長に使う - 成熟後：エネルギーを成長と再生産に使う</p>
-<p>再生産にかかるコストを考慮した成長モデルがのちの章で必要になる。 最初に、もとになるvon Bertalanffyの成長式を詳しく見ていく</span></p></section>
-<section id="vb-modelの基本" class="title-slide slide level1"><h1>vB modelの基本</h1><div align="left">
+<section id="目的" class="title-slide slide level1"><h1>目的</h1><ul>
+<li>個体の成長と再生産を表現する
 <ul>
-<li>同化作用(anabolic)と異化作用(catabolic)のプロセスから構成される
-<ul>
-<li><span class="math inline">\(Aw^n\)</span> :エネルギーの獲得(accuisition, anabolic)</li>
-<li><span class="math inline">\(kw\)</span> :エネルギーの損失(losses, catabolic)　</li>
+<li>Size spectrum theoryを個体群まで発展させるため、個体について詳細に記述する</li>
+<li>エネルギー収支（Energy budget)をサイズ(w)の関数とし、摂餌率(consumption rate)から成長・再生産率を記述</li>
+<li>これにより<strong>個体が獲得したエネルギーをどう利用するか</strong>を記述</li>
 </ul></li>
+<li>極限サイズをMaster traitの確立
+<ul>
+<li>シンプルで広く使われているvon Bertalanffyの成長モデル（以下,vBモデル）をベースに成長モデルを構築する</li>
+<li>シンプルな理論の構築にはパラメータは少ないほうが良い</li>
+<li>Life history invariants（魚種間で”systematically”に変動しないパラメータ）を使い、not invariantな（魚種間で変動する）パラメータを絞る</li>
+<li>最終的にパラメータは極限サイズに絞られる</li>
+<li>これは魚類の生活史パターンの殆どを特徴づけることができるMaster traitとなる</li>
+</ul></li>
+<li>個体サイズ、極限サイズ、生活史パラメータに関係づけてエネルギー収支を記述
+<ul>
+<li>成長と再生産だけでなく、消化と代謝による損失も考慮</li>
+<li>エネルギー収支は、個体の適応度を最適化するための生活史最適化の枠組みで決定する</li>
+<li>生活史パラメータの多くは経験的な値に頼る</li>
+</ul></li>
+</ul></section>
+<section id="the-von-bertallanffy-growth-model" class="title-slide slide level1"><h1>3.1 The von Bertallanffy growth model</h1><ul>
+<li>VBモデルは成熟にかかるコストを明確に取り入れていないが、本書の後の章では、成熟コストの考慮が必要となる</li>
+<li>本章では、成熟前と成熟後の異なる成長様式を一つのモデルで記述する(Biphasic growth model)
+<ul>
+<li>成熟前：エネルギーをすべて成長に使う</li>
+<li>成熟後：エネルギーを成長と再生産に使う</li>
+</ul></li>
+<li>最初に、ベースとなるvBモデルを詳しく見る</li>
+</ul></section>
+<section id="vbモデル1" class="title-slide slide level1"><h1>vBモデル:1</h1><div align = "left">
+<ul>
+<li>同化作用(anabolic)と異化作用(catabolic)のプロセスから構成される</li>
 </ul>
 <p><span class="math display">\[
 \frac{dw}{dt}= Aw^n-kw\tag{3.4}
 \]</span></p>
 <ul>
-<li>いずれも体重のべき乗（ｎと１）に比例する。</li>
-<li>nについて
+<li><p><span class="math inline">\(Aw^n\)</span> :エネルギーの獲得(accuisition, anabolic)</p></li>
+<li><p><span class="math inline">\(kw\)</span> :エネルギーの損失(losses, catabolic)　</p></li>
+<li><p>いずれも体重のべき乗（指数nと１）に比例する</p></li>
+<li><p>nについて</p>
 <ul>
 <li>エネルギーの獲得は同化作用の過程によって決まる</li>
 <li>同化作用は胃や腸など組織の表面積からの、酸素や食料の吸収と解釈</li>
-<li>シンプルな2/3乗則に従うと考えた（２章で議論済）</li>
+<li>シンプルな2/3乗則に従うと考えた</li>
 </ul></li>
 </ul></section>
-<section><section id="体長ベースの成長式vbモデル" class="title-slide slide level1"><h1>体長ベースの成長式：vBモデル</h1><div align="left">
-<p>(3.4)式は<span class="math inline">\(w=cl^3\)</span>の関係を使い、<span class="math inline">\(K= k/3\)</span>, <span class="math inline">\(L_\infty=c^{-1/3}Ak\)</span>とおくと以下のように変形できる（see BOX3.1)</p>
+<section id="vbモデル２" class="title-slide slide level1"><h1>vBモデル:２</h1><div align = "left">
+<p>(3.4)式は、<span class="math inline">\(w=cl^3\)</span>の関係を使って<span class="math inline">\(K= k/3\)</span>, <span class="math inline">\(L_\infty=c^{-1/3}Ak\)</span>とおくと3.5式のように変形できる（see BOX3.1)</p>
 <p><span class="math display">\[
 \frac{dl}{dt} = K(L_\infty-l)\tag{3.5}
 \]</span></p>
@@ -488,178 +514,262 @@ document.getElementsByTagName('head')[0].appendChild(style);
 l(t) = L_\infty(1-e^{-K_t})\tag{3.6}
 \]</span></p>
 <ul>
-<li><span class="math inline">\(L_\infty\)</span>：asymptotic length: 極限体長,</li>
-<li>K：growth constant（時間あたり）</li>
+<li><span class="math inline">\(L_\infty\)</span>：asymptotic length: 極限体長</li>
+<li><span class="math inline">\(K\)</span>：growth constant（時間あたり）</li>
 </ul>
-<p>Kと<span class="math inline">\(A\)</span>、<span class="math inline">\(L_\infty\)</span>との関係は n = 2/3のとき</p>
+<p><span class="math inline">\(K\)</span>と<span class="math inline">\(A\)</span>、<span class="math inline">\(L_\infty\)</span>は <span class="math inline">\(n = 2/3\)</span>のとき以下の関係が成り立つ</p>
 <p><span class="math display">\[
 K=\frac{A}{3c^{1/3}}\frac{1}{L_\infty}\tag{3.7}
-\]</span></p>
-<p>vBモデルは、年齢あたりのサイズの変化をよく表現し、かつ体長という測定しやすい変数を用いたことで大いに成功した。</p></section><section id="図3.1a" class="slide level2">
-<h2>図3.1a</h2>
-<p>初期の成長は傾き<span class="math inline">\(KL_\infty\)</span>の直線似近く（斜めの破線）、<span class="math inline">\(l\)</span>が<span class="math inline">\(L_\infty\)</span>に近づくと成長が止まる（横の破線）。</p>
-<p><img src="chapter3p_files/figure-revealjs/3.1a-1.png" width="768" /></p>
-</section><section id="box3.1-length-and-weight-based-vb-model" class="slide level2">
-<h2>Box3.1 Length and Weight-based vB model</h2>
+\]</span></p></section>
+<section id="図3.1a" class="title-slide slide level1"><h1>図3.1a</h1><p>初期の成長は傾き<span class="math inline">\(KL_\infty\)</span>の直線似近く（斜めの破線）、<span class="math inline">\(l\)</span>が<span class="math inline">\(L_\infty\)</span>に近づくと成長が止まる（横の破線） <img src="chapter3p_files/figure-revealjs/3.1a-1.png" width="768" /></p>
+<!--
+## Box3.1 Length and Weight-based vB model
 <div align ="left">
-<p>3.4式を<span class="math inline">\(w=cl^3\)</span>を用いて変形すると</p>
-<p><span class="math display">\[
+3.4式を$w=cl^3$を用いて変形すると
+
+$$
 \frac{dw}{dt}=\frac{dcl^3}{dt}=3cl^2\frac{dl}{dt}=Aw^n-kw
-\]</span></p>
-<p><span class="math display">\[
+$$
+
+
+
+
+$$
 \frac{dl}{dt} = \frac{1}{3cl^3}A(cl^3)^n-\frac{kcl^3}{3cl^3}
-\]</span></p>
-<p>ここでn=2/3 ならば <span class="math display">\[
+$$
+
+
+
+ここでn=2/3 ならば
+$$
 \frac{dl}{dt}=\frac{1}{3}C^{-1/3}A-\frac{k}{3}l =\frac{k}{3}\bigl(\frac{c^{-1/3}A}{k}-l\bigr)
-\]</span></p>
-<p>K=$, <span class="math inline">\(L_\infty = \frac{c^{-1/3}A}{k}\)</span> とおけば、3.5式と同じになる。</p>
-</section></section>
-<section><section id="vbモデルの問題" class="title-slide slide level1"><h1>vBモデルの問題</h1><div align ="left">
+$$
+
+$K=\frac{k}{3}$,  $L_\infty = \frac{c^{-1/3}A}{k}$ とおけば、3.5式と同じになる。
+
+--></section>
+<section id="vbモデルの問題" class="title-slide slide level1"><h1>vBモデルの問題</h1><ul>
+<li><p><span class="math inline">\(K\)</span>と<span class="math inline">\(L_\infty\)</span>に相関関係がある（図3.2）</p>
 <ul>
-<li><span class="math inline">\(K\)</span>と<span class="math inline">\(L_\infty\)</span>に相関関係がある（図3.2）
-<ul>
-<li><span class="math inline">\(L_\infty\)</span>の誤差は<span class="math inline">\(K\)</span>に影響（いっぽうが過大推定されると、もう一方は過小推定される）</li>
+<li><span class="math inline">\(L_\infty\)</span>の誤差は<span class="math inline">\(K\)</span>に影響（いっぽうが過大推定→もう一方は過小推定）</li>
 <li><span class="math inline">\(L_\infty\)</span>の不確実性は高い</li>
-<li>Aを確かな筋から推定できれば、<span class="math inline">\(L_\infty\)</span>の不確実性の<span class="math inline">\(K\)</span>への影響は制限されるだろう</li>
 </ul></li>
-<li>nは3/4のほうがいい
+<li><p>Aを確かな筋から推定できれば、<span class="math inline">\(L_\infty\)</span>の不確実性の<span class="math inline">\(K\)</span>への影響を弱められるだろう</p></li>
+<li><p>nは3/4のほうがいい</p>
 <ul>
-<li>est(1997)は、代謝を表す体重のべき数に3/4乗則を採用した</li>
-<li>ここでも代謝生態学の流れに従い、n=3/4を採用する</li>
+<li>West(1997)は、代謝を表す体重のべき数に3/4乗則を採用した</li>
 </ul></li>
-</ul></section><section id="図3.2-kとlinfty-の関係" class="slide level2">
-<h2>図3.2　Kと<span class="math inline">\(L\infty\)</span>　の関係</h2>
+<li><p>本章でもn=3/4を採用する</p></li>
+</ul></section>
+<section id="図3.2-kとl_infty-の関係" class="title-slide slide level1"><h1>図3.2　Kと<span class="math inline">\(L_\infty\)</span>　の関係</h1><ul>
+<li><span class="math inline">\(K\)</span> と<span class="math inline">\(W_\infty\)</span>の関係を、既往の知見で得られている実測値によって示した。</li>
+<li>モデルを<span class="math inline">\(K = CL_\infty^{-n}\)</span>として、破線はnとCを推定した場合、実線はn＝0.75に固定した場合。水温15℃での成長になるよう調整</li>
+</ul>
 <pre><code>## Fit of K: C =  2.849059  and exponent  -0.5910522 
 ## K fitted wit n=0.75:  5.068568</code></pre>
-<p><img src="chapter3p_files/figure-revealjs/3.2-1.png" width="576" /></p>
-</section></section>
-<section><section id="master-traitとしてのw_infty" class="title-slide slide level1"><h1>3.2 Master Traitとしての<span class="math inline">\(W_\infty\)</span></h1><div align ="left">
+<p><img src="chapter3p_files/figure-revealjs/g3.2-1.png" width="480" /></p></section>
+<section id="asymptotic-size-as-a-mster-trait" class="title-slide slide level1"><h1>3.2 Asymptotic size as a mster trait</h1><div align ="left">
 
 <ul>
-<li>vBモデルはエネルギーの獲得（<span class="math inline">\(AW^n\)</span>)と損失(<span class="math inline">\(kw\)</span>)の関係が年齢・サイズによって変化することで形が決まる</li>
-<li>年齢・サイズが大きくなる→損失が大きくなる→成長にエネルギーが回らなくなり成長は止まる</li>
-<li><span class="math inline">\(A\)</span>,<span class="math inline">\(k\)</span>,<span class="math inline">\(W_\infty\)</span>の関係は3.11式のように書ける</li>
+<li><p>vBモデルはエネルギーの獲得（<span class="math inline">\(AW^n\)</span>)と損失(<span class="math inline">\(kw\)</span>)の関係が年齢・サイズによって変化することで形が決まる</p></li>
+<li><p>年齢・サイズが大きくなると、繁殖による損失が大きくなり、成長にエネルギーが回らなくなる（図3.1b）</p></li>
+<li><p><span class="math inline">\(A\)</span>,<span class="math inline">\(k\)</span>,<span class="math inline">\(W_\infty\)</span>の関係は3.11式のように書ける</p></li>
 </ul>
 <p><span class="math display">\[
 W_\infty=\bigl(\frac{A}{k}\bigr)^\frac{1}{1-n}\tag{3.11}
 \]</span></p>
-<p>(3.4)、(3.11)式から(3.12)式が導ける。 種による成長の違いは<span class="math inline">\(A\)</span>と<span class="math inline">\(W_\infty\)</span>だけで記述できる <span class="math display">\[
-\frac{dw}{dt}=Aw^n\bigl[1-\bigl(\frac{w}{W_\infty}\bigr)^{1-n}\bigr]\tag{3.12}
-\]</span></p></section><section id="図3.1a-1" class="slide level2">
-<h2>図3.1a</h2>
-<p>初期の成長は傾き<span class="math inline">\(KL_\infty\)</span>の直線似近く（斜めの破線）、<span class="math inline">\(l\)</span>が<span class="math inline">\(L_\infty\)</span>に近づくと成長が止まる（横の破線）。</p>
-<p><img src="chapter3p_files/figure-revealjs/3.1-1.png" width="576" /></p>
-</section></section>
-<section><section id="aについて" class="title-slide slide level1"><h1><span class="math inline">\(A\)</span>について</h1><div align ="left">
-
 <ul>
-<li><p><span class="math inline">\(A\)</span>(Growth coefficient) はエネルギーの獲得と同化のプロセスを表現する</p></li>
-<li><p>このプロセスは種の極限体長とは関係しないと期待できる。</p></li>
-<li><p>vBモデルで推定された<span class="math inline">\(K\)</span> と<span class="math inline">\(L_\infty\)</span>の値を用い、（3.10）式に基づき<span class="math inline">\(A\)</span>を決定する（図3.3, BOX3.2）</p></li>
-<li><p>図3.3から、Aは<span class="math inline">\(W_\infty\)</span>に対して独立のよう</p></li>
-<li><p>変動は大きい</p></li>
-<li><p><span class="math inline">\(W_\infty\)</span>に対してやや増加傾向だが、以下では単純のためAは一定（<span class="math inline">\(≒5.35g^{0.25}/yr\)</span>)として扱う。</p></li>
-</ul></section><section id="図-3.3" class="slide level2">
-<h2>図 3.3</h2>
+<li>(3.4)式と(3.11)式から(3.12)式が導ける。</li>
+</ul>
+<p><span class="math display">\[
+\frac{dw}{dt}=Aw^n\bigl[1-\bigl(\frac{w}{W_\infty}\bigr)^{1-n}\bigr]\tag{3.12}
+\]</span> この式により、魚種による成長の違いは<span class="math inline">\(A\)</span>と<span class="math inline">\(W_\infty\)</span>だけで記述可能となった</p></section>
+<section id="図3.1b" class="title-slide slide level1"><h1>図3.1b</h1><ul>
+<li>個体の体重と獲得エネルギーの関係。太い実線が<span class="math inline">\(Aw^n\)</span>,細い実線が<span class="math inline">\(kw\)</span>。</li>
+<li>右側の縦の破線は極限サイズ＝10kgの魚種の場合で、獲得エネルギーと損失エネルギーが等しくなったところで成長が止まる</li>
+</ul>
+<p><img src="chapter3p_files/figure-revealjs/g3.1b-1.png" width="672" /></p></section>
+<section id="aについて" class="title-slide slide level1"><h1><span class="math inline">\(A\)</span>について</h1><div align ="left">
+<ul>
+<li><span class="math inline">\(A\)</span>(Growth coefficient) はエネルギーの獲得と同化のプロセスを表現する</li>
+<li>このプロセスは種の極限体長とは関係しないと期待できる。</li>
+<li>vBモデルで推定された<span class="math inline">\(K\)</span> と<span class="math inline">\(L_\infty\)</span>の値を用い、BOX3.2の（3.10）式に基づき<span class="math inline">\(A\)</span>を決定する（図3.3, BOX3.2）</li>
+<li><span class="math inline">\(A\)</span> は<span class="math inline">\(W_\infty\)</span>に対して変動幅大きくやや増加傾向だが、単純のため<span class="math inline">\(A\)</span>はinvariant（<span class="math inline">\(≒5.35g^{0.25}/yr\)</span>)として扱う。</li>
+</ul></section>
+<section id="図-3.3" class="title-slide slide level1"><h1>図 3.3</h1><p>既往の知見で得られた<span class="math inline">\(W_\infty\)</span>と<span class="math inline">\(A\)</span>の関係。実線は<span class="math inline">\(A\)</span>の相乗平均、破線は指数関数を当てはめた場合（指数は0.053）</p>
 <pre><code>## Fit to A, coef.:  3.835818 , exponent:  0.05298262 
 ## Amean  5.346588</code></pre>
-<p><img src="chapter3p_files/figure-revealjs/3.3-1.png" width="576" /></p>
-</section><section id="box3.2" class="slide level2">
-<h2>BOX3.2</h2>
-<p><span class="math inline">\(KL_\infty\)</span>とAの関係は、n=2/3で確認されているのであるが、box3.2から、n=3/4でも概ねOK。</p>
-</section></section>
-<section id="biphasic-growth-equation" class="title-slide slide level1"><h1>Biphasic Growth Equation</h1><ul>
-<li>vBモデルから発展</li>
-<li>エネルギーを成長につぎ込む稚魚期と、繁殖も行う成魚の成長を区別した上で統合、再生産によるロスを成長式に反映した</li>
+<p><img src="chapter3p_files/figure-revealjs/g3.3-1.png" width="576" /></p>
+<!--
+## BOX3.2
+$KL_\infty$とAの関係は、n=2/3で確認されているのであるが、box3.2から、n=3/4でも概ねOK。
+--></section>
+<section id="biphasic-growth-equation" class="title-slide slide level1"><h1>Biphasic growth equation</h1><div align ="left">
+<ul>
+<li><p>vBモデルから発展</p></li>
+<li><p>再生産にかかるコストを考慮するため、獲得エネルギーの全部を成長に使う稚幼魚期と、繁殖にも使う成魚期の成長を区別した上で統合</p></li>
+<li><p>初回成熟時の体重（<span class="math inline">\(w_m\)</span>）の<span class="math inline">\(W_\infty\)</span>に対する比率を<span class="math inline">\(\eta_m\)</span>とすると</p>
+<ul>
+<li><p>稚魚期の成長(<span class="math inline">\(w&lt;\eta_mW_\infty\)</span>のとき）: <span class="math inline">\(g_j(w) = Aw^n\)</span></p></li>
+<li><p>成魚の成長(<span class="math inline">\(w&gt;\eta_mW_\infty\)</span>のとき） : <span class="math inline">\(g(w) = Aw^n-kw\)</span></p></li>
+</ul></li>
 </ul>
-<p>初回成熟時の体重（＝半数成熟体重）の極限体重に対する比率を<span class="math inline">\(\eta_m\)</span>とすると - 未成魚の成長　<span class="math inline">\(g_j(w) = Aw^n\)</span> - 成魚の成長　　<span class="math inline">\(g(w) = Aw^n-kw\)</span> , <span class="math inline">\(w&gt;\eta_mW_\infty\)</span></p>
-<p>両者を成熟関数<span class="math inline">\(\psi_m(w/w_m)\)</span>でつなぐ</p>
+<p><span class="math inline">\(\eta_m\)</span>は図3.4aからinvariant と仮定</p></section>
+<section id="図3.4" class="title-slide slide level1"><h1>図3.4</h1><ul>
+<li>a: <span class="math inline">\(W_\infty\)</span>と<span class="math inline">\(\eta_m\)</span>の関係。<span class="math inline">\(\eta\)</span>はinvariantとみてよい（データはOlsson and Gislason(2016）</li>
+<li>b:North sea saitheの成熟曲線。3.15式を当てはめた。3.15式のuを5と見積もった（データはICES資源評価から）</li>
+</ul>
+<pre><code>## Average eta_m 0.2816643</code></pre>
+<p><img src="chapter3p_files/figure-revealjs/g3.4-1.png" width="672" /></p>
+<pre><code>##   weight 
+## 4.819822</code></pre></section>
+<section id="成熟関数の導入" class="title-slide slide level1"><h1>成熟関数の導入</h1><div align = "left">
+<ul>
+<li>両ステージをつなぐため、関数<span class="math inline">\(\psi_m(w/w_m)\)</span>を導入</li>
+</ul>
 <p><span class="math display">\[
 \psi_m(w/w_m) = \bigl[1+\bigl(\frac{w}{w_m}\bigr)^{-u}\bigr]^{-1}=\bigl[1+\bigl(\frac{w}{\eta_mW_\infty}\bigr)^{-u}\bigr]^{-1}\tag{3.15}
 \]</span></p>
-<p><span class="math inline">\(\psi(w/w_m)\)</span>は、<span class="math inline">\(w\ll w_m\)</span>ではゼロに、<span class="math inline">\(w\gg w_m\)</span>では1に近づく。 uはその変化の強さを決めるパラメータ（図3.4bの立ち上がり＝steepnessを決める）</p>
-<p>成熟関数を導入することにより、生活史の異なるphaseを一つの式にまとめる <span class="math display">\[
+<ul>
+<li><p><span class="math inline">\(\psi(w/w_m)\)</span>は、<span class="math inline">\(w\ll w_m\)</span>ではゼロに、<span class="math inline">\(w\gg w_m\)</span>では1に近づく</p></li>
+<li><p>uはその変化の強さを決めるパラメータ（図3.4b＝steepnessを決める）</p></li>
+<li><p>成熟関数を導入することにより、両ステージを一つの式で記述 <span class="math display">\[
 g_{bp}(w)=Aw^n-\psi_m(w/w_m)kw\tag{3.16}
-\]</span> ここで3.11式を変形した3.17式を使うと、成長式は3.18式のように書ける <span class="math display">\[
+\]</span></p></li>
+<li><p>ここで3.11式を変形した3.17式を使うと、成長式は3.18式のように書ける <span class="math display">\[
 k=AW_\infty^{n-1}\tag{3.17}
-\]</span></p>
+\]</span></p></li>
+</ul>
 <p><span class="math display">\[
 g_{bp}(w) = Aw^n\bigl[1-\psi\bigl(\frac{w}{\eta_mW_\infty}\bigr)\bigl(\frac{w}{W_\infty}\bigr)^{1-n}\bigr]\tag{3.18}
-\]</span></p>
-<p>biphasic modelは解析的に解けないが、幼魚期の部分だけとりだせば解析的に解くことができる（Box3.3）</p></section>
-<section><section id="biphasic-model-の利点" class="title-slide slide level1"><h1>Biphasic model の利点</h1><ul>
-<li>繁殖への投資を考慮している</li>
-<li>再生産が極限体長に対してどのようにスケーリングされるか示している</li>
+\]</span></p></section>
+<section id="図3.6" class="title-slide slide level1"><h1>図3.6</h1><ul>
+<li>Biphasic modelは年齢あたり体重を解析的に解くことができないが、幼魚期の部分だけとりだせば解析的に解くことができる（Box3.3）</li>
+<li>数値計算的に説いた例は図3.6に示す</li>
 </ul>
-<p>繁殖への投資のべき数は負であるので、極限体長が大きくなるほど体重あたりの繁殖への投資は減少する。この減少のパターンは図3.5に示すように、観察されている。 繁殖投資kwは卵の生産だけでなく、他の繁殖に関わる要素：産卵回遊など　にも使われる。これらその他の繁殖に要するエネルギーも個体の産卵量（ <span class="math inline">\(R_egg\)</span> 個体あたり時間あたり卵量）に比例すると考えて、 <span class="math display">\[
+<p>vBモデルと、数値解析的に説いたBiphasic growth modelの比較 <img src="chapter3p_files/figure-revealjs/g3.6-1.png" width="576" /></p>
+<!--
+## BOX3.3
+Biphasic modelは解析的に解けないが、幼魚期の部分だけとりだせば解析的に解くことができる（Box3.3）
+--></section>
+<section id="biphasic-model-について" class="title-slide slide level1"><h1>Biphasic model について</h1><ul>
+<li><p>繁殖への投資(investment in reproduction)を考慮した</p></li>
+<li><p>繁殖の<span class="math inline">\(W_\infty\)</span>に対するスケールが示される</p></li>
+<li><p>繁殖への投資の指数はマイナス（3.17式）となり<span class="math inline">\(W_\infty\)</span>が大きくなると体重あたりの繁殖への投資は減少する。これは観測に一致する（図3.5）</p></li>
+<li><p>繁殖投資（<span class="math inline">\(kw\)</span>）は卵生産だけでなく他の繁殖に関わる投資（産卵回遊など）も含む</p></li>
+<li><p>卵生産以外の繁殖に要するエネルギーも産卵量（<span class="math inline">\(R_{egg}\)</span>:個体あたり時間あたり卵量）に比例する</p></li>
+</ul>
+<p><span class="math display">\[
 R_{egg} = \varepsilon_{egg}kw = \varepsilon_{egg}AW^{n-1}_\infty
 \]</span></p>
-<p><span class="math inline">\(\varepsilon_{egg}\)</span> は再生産効率（reproductive efficiency)であり、図3.5から0.22に近似できる。</p></section><section id="図3.5" class="slide level2">
-<h2>図3.5</h2>
+<p><span class="math inline">\(\varepsilon_{egg}\)</span> (再生産効率:reproductive efficiency)はinvariantであり、図3.5から0.22に近似できる</p></section>
+<section id="図3.5" class="title-slide slide level1"><h1>図3.5</h1><ul>
+<li><span class="math inline">\(W_\infty\)</span>とReproductive outputの関係。この関係から<span class="math inline">\(\varepsilon_a\)</span> ≒0.22と見積もった。</li>
+<li>GSI/Aをreproductive output としている。データはGunderson(1997)</li>
+</ul>
 <pre><code>## Fit to R -1.854239 -0.2028964 
 ## eps_repro =  0.219714 .</code></pre>
-<p><img src="chapter3p_files/figure-revealjs/3.5-1.png" width="576" /></p>
-</section></section>
-<section id="trait-based-growth-model-が仮定するもの" class="title-slide slide level1"><h1>Trait based growth model が仮定するもの</h1><p>パラメータ（<span class="math inline">\(A\)</span>,　<span class="math inline">\(\varepsilon_{egg}\)</span>, <span class="math inline">\(\eta_m\)</span>, <span class="math inline">\(n\)</span>）は, 種の間で大まかにはinvariantとし、成長と再生産の種の違いを表現する、主たる形質（master trait)として極限サイズ<span class="math inline">\(W_\infty\)</span> を採用した。</p>
-<p>これにより、小さい魚と大きな魚の違いについて一般化した記述が可能になる（general statementを作ることができる）。</p>
-<p>もちろん<span class="math inline">\(W_\infty\)</span>以外の形質についても種特異的な値を用いれば、その種のより正確な成長式を得ることができる。</p></section>
-<section id="成長式においてエネルギーの流れを把握すると" class="title-slide slide level1"><h1>3.3 成長式においてエネルギーの流れを把握すると</h1><p>biphasic growth modelは、成長と再生産をサイズの関数として記述する。それじたい、一つの朱だけを相手にするには十分だが、今後動的な成長に関する記述を扱うには不十分。それに重要なパラメータである成長効率Aは経験的なデータに頼って決めた。Aは２章で構築した生理学に基づく基本的な仮定とどう結びつくだろう？もうちょい深堀りが必要。</p>
-<p>biphasic growth modelの元になるvon bertalanffyの成長式は、同化作用（anabolic)過程:エネルギーの獲得（<span class="math inline">\(Aw^n\)</span>) と、異化作用（catabolic)過程：エネルギーの損失（<span class="math inline">\(kw\)</span>)の過程から構成され、呼吸はkwに関係すると考えた。彼の成長と代謝に関する解釈は、単純すぎる。損失はエネルギーの獲得過程でも生じるし、再生産による損失は考えていない。</p>
-<p>エネルギー代謝を絵に書くと図3.7 数式に書くと以下の式になる。</p>
+<p><img src="chapter3p_files/figure-revealjs/g3.5-1.png" width="576" /></p></section>
+<section id="のまとめ" class="title-slide slide level1"><h1>3.2のまとめ</h1><ul>
+<li><p>パラメータ（<span class="math inline">\(A\)</span>,　<span class="math inline">\(\varepsilon_{egg}\)</span>, <span class="math inline">\(\eta_m\)</span>, <span class="math inline">\(n\)</span>）はinvariantとする</p></li>
+<li><p>魚種による違いを表現するmaster traitとして極限サイズ<span class="math inline">\(W_\infty\)</span> を採用</p></li>
+<li><p>これにより小型魚から大型魚まで含めたgeneral statementを作ることができる。</p></li>
+<li><p><span class="math inline">\(W_\infty\)</span>以外の形質について種特異的な値を用いれば、種特異的な、より正確な成長式が得られる</p></li>
+</ul>
 <p><span class="math display">\[
-C(w)=M_{assim}(w) + M_{std}(w) +M_{act}(w) + R_{egg}(w)/\varepsilon_{egg}+g(w)
-\]</span></p>
-<p><span class="math inline">\(C(w)\)</span> :consumption, <span class="math inline">\(M_{assim}(w)\)</span>: assimilation</p>
-<p><span class="math inline">\(M_{std}(w)\)</span>: standard metabolism, <span class="math inline">\(M_{act}(w)\)</span> :activity</p>
-<p><span class="math inline">\(R_{egg}(w)/\varepsilon_{egg}\)</span>:reproduction</p>
-<p><span class="math inline">\(g(w)\)</span>:growth</p>
-<p>すべての項は湿重量の関数であり、湿重量はエネルギーに換算できる（１gで5.5KJ）ので、上の式はenergy budgetを表現しているといえる。これらを2章でえたパラメータに置き換えていく。</p>
-<p>図3.7</p></section>
-<section id="consumption-and-assimilation" class="title-slide slide level1"><h1>Consumption and Assimilation</h1><p>2章において、消費率は<span class="math inline">\(C(w) = f_0hw^n\)</span> (2.18式)と記述した。ここで摂餌レベル<span class="math inline">\(f_0\)</span> は最大消費レベル<span class="math inline">\(hw^n\)</span>の一部としての消費である。消費がすべて同化されるわけではなく、エネルギーに使用されずに排出される損失（ egestion:消化器系による排泄+ excreation:血液系による排泄）、消化吸収に関係する代謝（<span class="math inline">\(M_{assim}\)</span>による損失がある。これらは摂餌量に比例する。Kitchell el al(1977)は消化行動で15％、egestionで15％、excreationで10％のロスがあると見積もった。この部分を最大消費量に対する損失を表現する係数<span class="math inline">\(\varepsilon_a\)</span>として、2章の2.18式にかけると、同化量は以下のように書ける。</p>
-<p><span class="math display">\[
-C_{assim}(w) = \varepsilon_af_0hw^n＝C(w)-M_{assim}
+g_{bp}(w) = Aw^n\bigl[1-\psi\bigl(\frac{w}{\eta_mW_\infty}\bigr)\bigl(\frac{w}{W_\infty}\bigr)^{1-n}\bigr]\tag{3.18}
 \]</span></p></section>
-<section id="standard-metabolism-and-activity" class="title-slide slide level1"><h1>Standard Metabolism and Activity</h1><p>standatd metabolism は、生命を維持するために必要な基本的な代謝量であり、</p>
-<p><span class="math display">\[M_{std} = k_sw^n\]</span>と書ける。</p>
-<p>一方、activity metabolismは見積もりが難しい。ここはシンプルに、<span class="math inline">\(M_{std}\)</span>に比例するとし、その比率は<span class="math inline">\(k_s\)</span>に含まれると考える。standard and activity metabolismは、最大消費率<span class="math inline">\(hw^n\)</span>に比例すると考えることができ、</p>
-<p><span class="math inline">\(k_s = f_c\varepsilon_ah\)</span> とする。<span class="math inline">\(f_c\)</span>は限界摂餌レベルである。生命の維持と摂餌のための代謝はしたがって、ksを限界摂餌レベルの<span class="math inline">\(\varepsilon_ah\)</span>　倍として以下のように書くことができる。 <span class="math display">\[
-M_{std}(w) + M_{act} = f_c\varepsilon_ahw^n
+<section id="bioenergetic-formulaton-of-the-growth-equation" class="title-slide slide level1"><h1>3.3 Bioenergetic formulaton of the growth equation</h1><div align = "left">
+<ul>
+<li><p>Biphasic growth modelは２章で構築した生理学に基づく過程とどう結びつくか？</p></li>
+<li><p>vBモデルのエネルギー収支の考えは単純すぎる：エネルギー獲得過程でのロスを考慮していない、<span class="math inline">\(kw\)</span>で表現している損失は主に再生産</p></li>
+</ul>
+<p>エネルギー代謝を数式で表現すると <span class="math display">\[
+C(w)=M_{assim}(w) + M_{std}(w) +M_{act}(w) + R_{egg}(w)/\varepsilon_{egg}+g(w)\tag{3.26}
 \]</span></p>
-<p>Hartvig et al(2011)により、$f_c $ はおよそ0.2とする。</p>
-<p>さて3.26 式を書き換えて成長を表すようにまとめると、 <span class="math display">\[
-g(w) = \varepsilon_af_0hw^n -f_c\varepsilon_ahw^n-\psi(w/w_m)kw
+<p>ここで</p>
+<p><span class="math inline">\(C\)</span> :consumption, <span class="math inline">\(M_{assim}\)</span>: assimilation, <span class="math inline">\(M_{std}\)</span>: standard metabolism, <span class="math inline">\(M_{act}\)</span> :activity</p>
+<p><span class="math inline">\(R_{egg}/\varepsilon_{egg}\)</span>:reproduction, <span class="math inline">\(g\)</span>:growth</p></section>
+<section id="consumption-and-assimilation" class="title-slide slide level1"><h1>Consumption and assimilation</h1><ul>
+<li>2章において摂餌率を　<span class="math inline">\(C(w) = f_0hw^n\)</span> (2.18式)と記述</li>
+<li>摂餌レベル<span class="math inline">\(f_0\)</span> は最大摂餌レベル<span class="math inline">\(hw^n\)</span>の一部→ 摂餌～同化のあいだに損失がある
+<ul>
+<li>エネルギーに使用されない損失＝排泄（egestion:消化器系による排泄+excreation:血液系による排泄）</li>
+<li>消化吸収のための代謝（<span class="math inline">\(M_{assim}\)</span>)による損失</li>
+</ul></li>
+<li>これらは摂餌量に比例する。</li>
+</ul>
+<p>Kitchell el al.(1977)は消化行動で15％、egestionで15％、excreationで10％のロスがあると見積もった。</p>
+<p>これらの損失を係数<span class="math inline">\(\varepsilon_a\)</span>として、2章の2.18式にかけると、同化量は以下のように書ける。</p>
+<p><span class="math display">\[
+C_{assim}(w) = \varepsilon_af_0hw^n　＝C(w)-M_{assim}\tag{3.27}
+\]</span></p></section>
+<section id="standard-metabolism-and-activity" class="title-slide slide level1"><h1>Standard metabolism and activity</h1><ul>
+<li><p>基礎代謝は <span class="math inline">\(M_{std} = k_sw^n\)</span> と書ける</p></li>
+<li><p>activityによる代謝<span class="math inline">\(M_{act}\)</span>は見積もりが難しいので、<span class="math inline">\(M_{std}\)</span>に比例するとして<span class="math inline">\(M_{std}\)</span>と合わせて考える</p></li>
+<li><p><span class="math inline">\(M_{std}+M_{act}\)</span>は最大摂餌率<span class="math inline">\(hw^n\)</span>に比例すると考え、<span class="math inline">\(k_s = f_c\varepsilon_ah\)</span> （<span class="math inline">\(f_c\)</span>は限界摂餌レベル）として</p></li>
+</ul>
+<p><span class="math display">\[
+M_{std}(w) + M_{act} = f_c\varepsilon_ahw^n\tag{3.28}
+\]</span></p>
+<p><span class="math inline">\(f_c\)</span> はinvariant とし、Hartvig et al(2011)により約0.2とする。</p></section>
+<section><section id="ふたたびaについて" class="title-slide slide level1"><h1>ふたたび<span class="math inline">\(A\)</span>について</h1><div align = "left">
+<p>3.26 式を書き換えて成長を表すようにまとめると、 <span class="math display">\[
+g(w) = \varepsilon_af_0hw^n -f_c\varepsilon_ahw^n-\psi(w/w_m)kw\tag{3.29}
 \]</span></p>
 <p><span class="math display">\[
-g(w) = \varepsilon_ah(f_0-f_c)w^n-\psi(w/w_m)kw
+g(w) = \varepsilon_ah(f_0-f_c)w^n-\psi(w/w_m)kw\tag{3.30}
 \]</span></p>
-<p><span class="math display">\[
-A=\varepsilon_ah(f_0-f_c)
+<p>となり、<span class="math inline">\(A\)</span>は以下のように書ける <span class="math display">\[
+A=\varepsilon_ah(f_0-f_c)\tag{3.31}
 \]</span></p>
-<p>となる。<span class="math inline">\(\varepsilon_a, f_0, fc, h\)</span>　の定数は、種によって大きく違わない(life history invariantsである）ことが期待される。なので成長係数Aは一定と扱うことができる（じつは<span class="math inline">\(f_0\)</span>は4章のモデルにより一定とは言えないことがわかってるんだけど）。</p></section>
-<section id="魚類の生活史を描くmaster-traitは他にないのか" class="title-slide slide level1"><h1>3.4 魚類の生活史を描くMaster traitは他にないのか</h1><p>　成長式に含まれるいろいろなプロセスは、<span class="math inline">\(W_\infty\)</span>できまるとしているが、たとえば3.11式からは<span class="math inline">\(W_{\infty}\)</span>がAとkで決まるともいえる。Aを一定と考えれば、kをMater traitとし、Aとkから<span class="math inline">\(W_{\infty}\)</span>を決めることもできる。なぜそうしないか？</p>
+<p><span class="math inline">\(\varepsilon_a, f_0, fc, h\)</span>　の定数は invariantsなので、理論的にも<span class="math inline">\(A\)</span>はinvariantと考えることができる。</p>
+<p>図3.8にそれぞれのエネルギーの関係を示した</p></section><section id="図3.8" class="slide level2">
+<h2>図3.8</h2>
+<p><img src="chapter3p_files/figure-revealjs/g3.8-1.png" width="576" /></p>
+</section></section>
+<section id="which-other-traits-describe-fish-life-histories" class="title-slide slide level1"><h1>3.4 Which other traits describe fish life histories?</h1><ul>
+<li><p>3.11式は<span class="math inline">\(W_\infty\)</span> 、 <span class="math inline">\(A\)</span>、<span class="math inline">\(k\)</span> の関係を示している。<span class="math inline">\(W_\infty\)</span>ではなく<span class="math inline">\(k\)</span>をMaster trait とすることもできるが、<span class="math inline">\(W_\infty\)</span>には利点がある</p>
 <ul>
 <li>使いやすく推定が楽。</li>
-<li>data-limitedな資源でも推定可能→data-poorな資源にもモデルを応用できる。</li>
-<li>直感的（intuitive)にわかりやすい。<span class="math inline">\(W_{\infty}=10kg\)</span>といわれるとそりゃ魚食性魚類だろうと想像できるが、<span class="math inline">\(k=0.44/yr\)</span>といわれてもピンとこない。</li>
-</ul>
-<p>　本章の個体成長モデルは、生活史に関わる多くの重要なパラメータが<span class="math inline">\(W_{\infty}\)</span>　と（または） Aに比例するから、Aと<span class="math inline">\(W_\infty\)</span> が決まればその他のパラメータを決めることができる。理論的には正しいが、データ解析からは明確にその関係を示せていない。<span class="math inline">\(W_\infty\)</span> と<span class="math inline">\(W_m\)</span> (成熟サイズ) の比（<span class="math inline">\(\eta_m\)</span>)は種によってかなり異なるが、これをinvariantsといえるだろうか？　この疑問には3つの観点から答えることができよう、semantic（意味論的）、empiric(経験的)、thoretic(理論的)に。</p>
-<p>　ある形質（<span class="math inline">\(W_\infty\)</span>と$ W_m$ の比など）が”invariant”ということは、種によって異ならないということではなく、その形質がほかの形質（成長速度、水温などの環境、系統発生学的な位置関係）と”co-vary”ではないことを意味する。現段階では、invariantとされる形質の種による変動はランダムで、他の形質との関係で説明できない予測不能であるということだ。生活史パラメータが基本的にinvariantであるという誤解をさけるためには、life history parameterといったほうがよかろう。</p>
-<p>　経験的には、データに限界があることを忘れてはいけない。パラメータのいくつかは直接推定されていない。たとえばAであるが、これは個々の推定されたvon Bertalanffy の成長曲線から推定したKと<span class="math inline">\(L_{\infty}\)</span>から得たもので、考慮していないバイアスが含まれるだろうし、systematicなバイアスもあるだろう。</p>
-<p>　それに成長曲線の多くは１個体のそれではなく、年齢あたりサイズの平均である。もし速い成長が高い死亡率につながるのであれば、高齢になるほどデータは遅い成長の個体のもので占められ、結果にバイアスが生じる。再生産投資などは推定自体が難しい。生殖腺重量は繁殖投資のプロキシではあるが、年間の繁殖投資を推定するには、一年に何回産卵するか、摂密度によって産卵はどのように変化するか、skip spawnerがどれくらいいるか、産卵回遊や産卵行動にどれくらいの投資が必要か、など知る必要がある。これらが適切に考慮されたとしても理論値からの残差は十分説明できないだろう。</p>
-<p>　きっと考慮できていない形質で説明される変動があるのだ。それが図3.3にみられるような・・・成長速度の10倍の変動幅をもたらすような。それがなにかはわからないが、仮説はたてられる。候補になるtrait axisの一つは　slow-fast life history continuum である。</p>
-<p>成長がおそい→餌が取れない＆clearance rateが小さい→活動量（activity）が小さい→<span class="math inline">\(f_c\)</span> (個体維持に最低限必要な摂餌レベル)が小さい（逆に成長が速いと<span class="math inline">\(f_c\)</span>が大きくなる）</p>
-<p>　→<span class="math inline">\(f_c\)</span>は定数でなく、A(<span class="math inline">\(=\varepsilon_ah(f_0-f_c)\)</span>)も変わる。</p>
-<p>clearance rate を正確に推定するのは難しいし、Niel Gerner Andersonの言葉を借りれば　enegy budgetのダークホースである活動量（activity coefficient)についての知識も乏しい。実際にトレードオフが明確に観測されていないのはこのような知識の乏しさによるだろう。</p>
-<p>　もうひとつの候補になる形質は防御への投資である。身を守るための棘を持ったり、擬態したり、隠れたりといった戦略にはそれぞれコストがかかる。隠れるということはその間、餌を得ることを我慢しなくてはならない。そのためのコストもある。防御形質が持つトレードオフは、slow-fast life　history continuumよりさらに扱いにくい。防御への投資と死亡率のトレードオフは後の章であつかう</p>
-<p>　これらのトレードオフが定量されれば、図3.3にみられるような誤差をいくぶん小さくすることはできるだろう。しかし考慮すべき形質が増えるとモデルは複雑になっていくので、大きな意味のある改善がみとめられない限り、考慮すべき形質は可能な限り少ないほうが良い。この点は9章でまた議論するとして、最小モデルのMaster traitとして極限サイズを用いることとする。</p></section>
-<section id="summary" class="title-slide slide level1"><h1>3.5 Summary</h1><p>この章では vBモデルをもとにしたbiphasic growth modelを構築した。このモデルは成長と再生産（繁殖）が極限サイズが異なる魚種間でどのように変化するかを示す：極限サイズが大きい魚種は、サイズあたりの繁殖投資が少ない。</p>
-<p>成長に関するその他のみかたも、パラメータのセットをつかって説明できる。これらパラメータは種の間でかならずしもinvariantではないが、極限サイズとの関係においてsystematicな変動はない。このため極限サイズは<span style="color:dark red;"> Master trait</span>となりうるのだ。</p>
-<p>para2 本章の成長モデルはvBのモデルとは一致しない。とくにJuvenile stageでの予測値はvBの予測値より小さくなる。vBモデルは成長データをよく代表するものとして受け入れられてきたので残念である。この違いは、吸収と基礎代謝による損失においてn=3/4を用いたことに由来する。この選択は、代謝がサイズによってどのようにスケーリングされるかという現在の認識に従うと（つまりスケーリングに関する現在の研究の流れからすると）完璧ではない。基礎代謝のスケールは3/4より大きいという報告がある（Killen, et al. 2007). 活動(activity)のスケールは実測が難しいが、理論的に3/4より大きいという考察がなされている（Ware1978）。juvenile stageのスケーリング指数を3/4より高くすれば、BP成長モデルの推定値はよりvBモデルに近くなる。したがって、BP成長モデルを改善するならば、明示的に代謝によるエネルギーの損失の項を設け、獲得の項とは異なるスケールを与えることになろう。あるいは、スケールを増やしたくない（nとも１とも異なるスケールを加えたくない）ならば、代謝による損失を catabolic termに含めることになろう。</p>
-<p>para3</p>
-<p>activityなどによる損失のスケールに3/4以上を用いない重要な理由は、損失のスケールをエネルギー獲得のためのスケールより大きくすると、すべての魚の<span class="math inline">\(W_\infty\)</span>を制限することになるためである。この制限は図3.1bに示されている。<span class="math inline">\(W_\infty\)</span> が大きいということは、損失にかかる係数は小さいということを意味する。</p>
-<p>もしすべての魚種の<span class="math inline">\(W_\infty\)</span>が1トンならば、3.17式から、係数ｋは<span class="math inline">\(A(1 ton)^{0.25}\approx 0.17yr^{-1}\)</span> より大きくはならない。これが10kgなら0.54，10gなら3.0であり、小型の魚種にとっては取るに足らない数字になる。あるいは、この損失項（Massim+Mstd+Mact)の係数が定数でなく、サイズによって変化すると考えたらどうだろう？しかし基礎代謝や活動のための代謝が大きい魚ほど小さくなるだろうか？むしろ代謝率は他の形質に関係すると見たほうが良い。もし代謝がサイズに依存するということが言えるようになったら、極限体長への依存性を維持することは問題にならなくなる。その場合はもっと高い精度と複雑なモデルが必要になる、ursin(1967)のような。</p>
-<p>(para4)</p>
-<p>本章のモデル構築での選択は、以下に述べる私の意図に沿うものである。つまり、筋の通った一般性のある理論を構築するため、ある程度精度を犠牲にしている。この犠牲によって成長と再生産を極限サイズの関数として表現することが可能になり、極限サイズの変動から様々な魚類資源について一般性のある記述が可能になる。この恩恵は、今後の章で受けることになる。そこでは形質ベースの成長と再生産のモデルによって、様々な魚類資源に対する漁業のサイズ依存的なインパクトを明らかにできる。結論として3.18式と3.30式は完璧ではない。しかしシンプルなサイズベースの成長式を構築し、すべての変動（変異性）をMaster traitとしての極限体長で示そうという目的を、もっともよく果たすものである。</p></section>
+<li>data-limitedな資源でも推定可能</li>
+<li>直感的（intuitive)にわかりやすい</li>
+</ul></li>
+<li><p><span class="math inline">\(W_{\infty}\)</span>と<span class="math inline">\(A\)</span> からの他のパラメータを決められる？</p>
+<ul>
+<li>理論的には正しいが、データからは明確に示せていない</li>
+<li>invariant として扱ったパラメータはinvariantか？ 例えば<span class="math inline">\(W_\infty\)</span> と<span class="math inline">\(W_m\)</span> (成熟サイズ) の比（<span class="math inline">\(\eta_m\)</span>)は種によってかなり異なるが</li>
+</ul></li>
+</ul></section>
+<section id="検討" class="title-slide slide level1"><h1>検討</h1><ul>
+<li>“Invariant”とは”種によらず一定"ということではない
+<ul>
+<li>他の形質（成長速度、水温などの環境、系統発生学的な位置関係）と”co-vary”ではない</li>
+<li>invariantとされる形質の魚種による変動はランダムで、予測不能である</li>
+</ul></li>
+<li>データの限界
+<ul>
+<li>パラメータのいくつかは直接推定されていない。考慮してできていないバイアスがある可能性</li>
+<li>既往のvBモデルは1個体の成長ではなく平均的なもの→現実の個体の成長を表していない</li>
+<li>繁殖への投資などは推定自体難しい</li>
+</ul></li>
+<li>魚種間の変動に関わる形質を考慮できていない
+<ul>
+<li>候補の形質はslow-fast life history continuum と防御にかかるコスト</li>
+<li>考慮すべき形質が増えるとモデルは複雑になる→意味のある改善がみとめられない限り、考慮すべき形質は少ないほうが良い</li>
+</ul></li>
+<li>最小モデルのMaster traitとして極限サイズを用いることとする。</li>
+</ul></section>
+<section id="summary" class="title-slide slide level1"><h1>3.5 Summary</h1><ul>
+<li><p>この章で構築したモデルは、成長と再生産（繁殖）が、極限サイズが異なる魚種間でどのように変化するかを示す。成長に関する様々なことを、invariantなパラメータのセットと極限サイズで説明できる。</p></li>
+<li><p>パラメータは魚種間で必ずしも一定ではないが、極限サイズとの関係においてsystematicな変動はないので、極限サイズを Master traitとすることができる。</p></li>
+<li><p>問題点</p>
+<ul>
+<li>vBのモデルとは一致しない：Juvenile stageでの予測値が小さくなる</li>
+<li>吸収と基礎代謝による損失においてn=3/4を用いたため。3/4より大きい可能性があり、改善の余地がある</li>
+</ul></li>
+<li><p>本章のモデルは完璧ではなく、精度を犠牲にしている。しかしシンプルな理論構築のため、一つのMaster trait（<span class="math inline">\(W_\infty\)</span>）によるシンプルなモデルを構築するという本章の目的をよく果たすといえる。精度を犠牲にしたことによって得られる恩恵を、後の章で受けることになる。</p></li>
+</ul></section>
     </div>
   </div>
 
